@@ -1,0 +1,1297 @@
+Task: صمّم نظام دفع إلكتروني آمن مع دعم بطاقات الائتمان و PayPal، مع شرح تدفق البيانات وإجراءات الأمان.
+Timestamp: 2026-04-08 12:55:17
+Total Tokens: 39802
+Total Calls: 6
+============================================================
+
+[💡 المبتكر]
+نظام الدفع الإلكتروني الآمن:
+------------------------
+
+### 1. نظرة عامة على النظام
+
+نظام الدفع الإلكتروني الذي نقترحه سيكون نظامًا متكاملًا يدعم بطاقات الائتمان و PayPal. سيتم تصميم النظام لضمان أمان العميل ومعلومات الدفع، مع توفير تجربة دفع سهلة وسريعة.
+
+### 2. مكونات النظام
+
+*   **واجهة المستخدم (UI)**: واجهة مستخدم سهلة الاستخدام للمستهلكين للتفاعل مع النظام.
+*   **خادم التطبيقات**: يدير العمليات التجارية ويتفاعل مع خوادمن بطاقات الائتمان و PayPal.
+*   **خادم قاعدة البيانات**: يحفظ معلومات المستخدم ومعلومات الدفع بشكل آمن.
+*   **بوابة الدفع**: تتعامل مع معالجة بطاقات الائتمان وعمليات PayPal.
+
+### 3. تدفق البيانات
+
+1.  **الدخول إلى النظام**: يُدخل المستخدم بياناته الشخصية ومعلومات الدفع.
+2.  **التحقق**: يتم التحقق من هويتة المستخدم ومعلومات بطاقته الائتمانية أو حسابه على PayPal.
+3.  **إجراء الدفع**: يُوجه المستخدم لبوابة الدفع لاستكمال الدفع.
+4.  **معالجة الدفع**: تعالج بوابة الدفع معلومات الدفع وتؤكد على نجاح أو فشل العملية.
+
+### 4. إجراءات الأمان
+
+*   **التشفير**: استخدام التشفير لجميع البيانات المرسلة والمستلمة.
+*   **التحقق ثنائي العامل**: يضيف طبقة أمان إضافية لمنع الوصول غير المصرح به.
+*   **تحديثات الأمان**: يتم تحديث النظام بانتظام لضمان حماية المستخدمين من التهديدات الجديدة.
+*   **الرقابة**: يتم مراقبة النظام بشكل دائم لاكتشاف وأداء أي أنشطة مشبوهة.
+
+### 5. الامتثال للوائح
+
+*   **PCI-DSS**: يتم الامتثال لمعايير أمان بيانات بطاقة الدفع.
+*   **GDPR**: يتم الامتثال لقوانين حماية البيانات العامة.
+*   **قوانين البلدان**: الامتثال للقوانين المحلية المتعلقة بالأمان الإلكتروني.
+
+### 6. خطة الطوارئ
+
+*   **استجابة للتطفل**: يتم وضع خطة لاستجابة الحوادث الأمنية.
+*   **استعادة النظام**: يتم إنشاء نسخة احتياطية من النظام لضمان استمرارية العمل.
+
+------------------------------------------------------------
+
+[📊 المحلل]
+### تصميم نظام الدفع الإلكتروني الآمن مع دعم بطاقات الائتمان و PayPal
+
+#### 1. نظرة عامة على النظام
+
+نظام الدفع الإلكتروني الذي نقترحه هو نظام متكامل يدعم بطاقات الائتمان و PayPal. الهدف الرئيسي هو ضمان أمان معلومات الدفع وتقديم تجربة دفع سلسة وفعالة للمستخدمين.
+
+#### 2. مكونات النظام
+
+1. **واجهة المستخدم (UI)**:
+   - واجهة سهلة الاستخدام للمستهلكين للتفاعل مع النظام.
+   - تتيح للمستخدمين إدخال معلومات الدفع وإتمام المعاملات بسهولة.
+
+2. **خادم التطبيقات**:
+   - يدير العمليات التجارية ويتفاعل مع خوادم بطاقات الائتمان و PayPal.
+   - يتعامل مع التحقق من الهوية ومعالجة المعاملات.
+
+3. **خادم قاعدة البيانات**:
+   - يحفظ معلومات المستخدم ومعلومات الدفع بشكل آمن.
+   - يستخدم تقنيات التشفير لحماية البيانات الحساسة.
+
+4. **بوابة الدفع**:
+   - تتعامل مع معالجة بطاقات الائتمان وعمليات PayPal.
+   - تربط النظام مع مقدمي خدمات الدفع الخارجيين بطرق آمنة.
+
+#### 3. تدفق البيانات
+
+1. **الدخول إلى النظام**:
+   - المستخدم يدخل بيانات تسجيل الدخول (اسم المستخدم وكلمة المرور).
+   - يتم تشفير هذه البيانات قبل إرسالها إلى الخادم.
+
+2. **إدخال معلومات الدفع**:
+   - المستخدم يدخل معلومات الدفع (رقم البطاقة، تاريخ الانتهاء، رمز الأمان لبطاقات الائتمان أو معلومات حساب PayPal).
+   - يتم تشفير هذه البيانات فورًا باستخدام بروتوكول SSL/TLS.
+
+3. **التحقق من الهوية**:
+   - يتم التحقق من هوية المستخدم باستخدام معلومات تسجيل الدخول المقدمة.
+   - يتم التحقق من صحة معلومات الدفع عبر خدمة التحقق من البطاقات أو API الخاص بـ PayPal.
+
+4. **إجراء الدفع**:
+   - يتم توجيه المستخدم إلى بوابة الدفع لاستكمال الدفع.
+   - بوابة الدفع تتعامل مع معالجة المعاملة وتأكيد نجاحها أو فشلها.
+
+5. **تأكيد الدفع**:
+   - يتم إرسال تأكيد الدفع إلى المستخدم عبر النظام.
+   - يتم تحديث قاعدة البيانات بحالة المعاملة (ناجحة أو فاشلة).
+
+#### 4. إجراءات الأمان
+
+1. **التشفير**:
+   - استخدام التشفير SSL/TLS لجميع البيانات المرسلة والمستلمة.
+   - تشفير معلومات الدفع في قاعدة البيانات باستخدام خوارزميات تشفير قوية مثل AES-256.
+
+2. **التحقق ثنائي العامل (2FA)**:
+   - إضافة طبقة أمان إضافية عبر إرسال رمز تحقق إلى رقم الهاتف المحمول أو البريد الإلكتروني المسجل.
+
+3. **تحديثات الأمان**:
+   - تحديث النظام بانتظام لضمان حماية المستخدمين من التهديدات الجديدة.
+   - تطبيق التصحيحات الأمنية فور توفرها.
+
+4. **الرقابة والتحليل**:
+   - مراقبة النظام بشكل مستمر لاكتشاف أي أنشطة مشبوهة.
+   - استخدام أدوات التحليل لتحديد الأنماط الغير طبيعية في المعاملات.
+
+#### 5. الامتثال للوائح
+
+1. **PCI-DSS**:
+   - الامتثال لمعايير أمان بيانات بطاقة الدفع (PCI-DSS) لضمان حماية معلومات البطاقات الائتمانية.
+
+2. **GDPR**:
+   - الامتثال لقوانين حماية البيانات العامة (GDPR) لضمان حماية البيانات الشخصية للمستخدمين في الاتحاد الأوروبي.
+
+3. **قوانين البلدان**:
+   - الامتثال للقوانين المحلية المتعلقة بالأمان الإلكتروني في البلدان التي يعمل فيها النظام.
+
+#### 6. خطة الطوارئ
+
+1. **استجابة للتطفل**:
+   - وضع خطة مفصلة لاستجابة الحوادث الأمنية.
+   - تدريب فريق الدعم على كيفية التعامل مع الهجمات والحوادث الأمنية.
+
+2. **استعادة النظام**:
+   - إنشاء نسخ احتياطية منتظمة للنظام لضمان استمرارية العمل.
+   - وضع إجراءات استعادة البيانات في حالة حدوث خلل أو هجوم إلكتروني.
+
+### الخلاصة
+
+نظام الدفع الإلكتروني المقترح يوفر تجربة آمنة وسلسة للمستخدمين، مع ضمان حماية معلومات الدفع وامتثاله للوائح الأمنية المعمول بها. من خلال تطبيق هذه الإجراءات، يمكن تحقيق مستوى عالٍ من الثقة والأمان في النظام.
+
+------------------------------------------------------------
+
+[💻 المبرمج]
+# نظام الدفع الإلكتروني الآمن: تصميم وتنفيذ مفصل
+
+## 1. البنية المعمارية للنظام
+
+```mermaid
+graph TD
+    A[عميل الويب/الموبايل] -->|HTTPS| B[خادم التطبيقات]
+    B -->|PCI-DSS| C[بوابة الدفع]
+    C --> D[معالج بطاقات الائتمان]
+    C --> E[PayPal API]
+    B -->|SQL مع تشفير| F[قاعدة البيانات الآمنة]
+    G[خدمة المراقبة] --> B
+    G --> C
+    H[خدمة النسخ الاحتياطي] --> F
+```
+
+## 2. تنفيذ النظام بلغة Python باستخدام Flask
+
+### ملف `app.py` - الخادم الرئيسي
+
+```python
+from flask import Flask, request, jsonify, render_template
+from flask_sqlalchemy import SQLAlchemy
+from werkzeug.security import generate_password_hash, check_password_hash
+import requests
+import os
+from dotenv import load_dotenv
+import jwt
+import datetime
+from functools import wraps
+import stripe
+import paypalrestsdk
+
+# تحميل المتغيرات البيئية
+load_dotenv()
+
+app = Flask(__name__)
+
+# إعداد قاعدة البيانات
+app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql://user:password@localhost/payment_db'
+app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
+app.config['SECRET_KEY'] = os.getenv('SECRET_KEY')
+app.config['STRIPE_SECRET_KEY'] = os.getenv('STRIPE_SECRET_KEY')
+app.config['PAYPAL_CLIENT_ID'] = os.getenv('PAYPAL_CLIENT_ID')
+app.config['PAYPAL_CLIENT_SECRET'] = os.getenv('PAYPAL_CLIENT_SECRET')
+
+db = SQLAlchemy(app)
+
+# إعداد Stripe
+stripe.api_key = app.config['STRIPE_SECRET_KEY']
+
+# إعداد PayPal
+paypalrestsdk.configure({
+    "mode": "sandbox",  # أو "live" للإنتاج
+    "client_id": app.config['PAYPAL_CLIENT_ID'],
+    "client_secret": app.config['PAYPAL_CLIENT_SECRET']
+})
+
+# نماذج قاعدة البيانات
+class User(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    username = db.Column(db.String(80), unique=True, nullable=False)
+    email = db.Column(db.String(120), unique=True, nullable=False)
+    password_hash = db.Column(db.String(128))
+    phone = db.Column(db.String(20))
+    two_factor_secret = db.Column(db.String(32))
+
+    def set_password(self, password):
+        self.password_hash = generate_password_hash(password)
+
+    def check_password(self, password):
+        return check_password_hash(self.password_hash, password)
+
+class PaymentMethod(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
+    type = db.Column(db.String(20), nullable=False)  # 'credit_card' or 'paypal'
+    token = db.Column(db.String(255), nullable=False)  # رمز مميز للبطاقة أو PayPal
+    last_four = db.Column(db.String(4))  # آخر 4 أرقام للبطاقة
+    is_default = db.Column(db.Boolean, default=False)
+
+class Transaction(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
+    amount = db.Column(db.Float, nullable=False)
+    currency = db.Column(db.String(3), default='USD')
+    payment_method_id = db.Column(db.Integer, db.ForeignKey('payment_method.id'))
+    status = db.Column(db.String(20), default='pending')  # pending, completed, failed
+    transaction_id = db.Column(db.String(255))  # معرف المعاملة من مزود الدفع
+    created_at = db.Column(db.DateTime, default=datetime.datetime.utcnow)
+
+# دالة للتحقق من التوكن
+def token_required(f):
+    @wraps(f)
+    def decorated(*args, **kwargs):
+        token = request.headers.get('Authorization')
+        if not token:
+            return jsonify({'message': 'Token is missing!'}), 403
+        try:
+            data = jwt.decode(token, app.config['SECRET_KEY'], algorithms=["HS256"])
+            current_user = User.query.get(data['user_id'])
+        except:
+            return jsonify({'message': 'Token is invalid!'}), 403
+        return f(current_user, *args, **kwargs)
+    return decorated
+
+# مسارات API
+@app.route('/register', methods=['POST'])
+def register():
+    data = request.get_json()
+
+    # التحقق من البيانات
+    if not data or not data.get('username') or not data.get('email') or not data.get('password'):
+        return jsonify({'message': 'Missing required fields'}), 400
+
+    # التحقق من وجود المستخدم
+    if User.query.filter_by(username=data['username']).first():
+        return jsonify({'message': 'Username already exists'}), 400
+
+    if User.query.filter_by(email=data['email']).first():
+        return jsonify({'message': 'Email already exists'}), 400
+
+    # إنشاء المستخدم
+    user = User(username=data['username'], email=data['email'])
+    user.set_password(data['password'])
+    db.session.add(user)
+    db.session.commit()
+
+    return jsonify({'message': 'User created successfully'}), 201
+
+@app.route('/login', methods=['POST'])
+def login():
+    data = request.get_json()
+
+    if not data or not data.get('username') or not data.get('password'):
+        return jsonify({'message': 'Missing username or password'}), 400
+
+    user = User.query.filter_by(username=data['username']).first()
+
+    if not user or not user.check_password(data['password']):
+        return jsonify({'message': 'Invalid username or password'}), 401
+
+    # إنشاء توكن JWT
+    token = jwt.encode({
+        'user_id': user.id,
+        'exp': datetime.datetime.utcnow() + datetime.timedelta(hours=24)
+    }, app.config['SECRET_KEY'], algorithm="HS256")
+
+    return jsonify({'token': token}), 200
+
+@app.route('/add_payment_method', methods=['POST'])
+@token_required
+def add_payment_method(current_user):
+    data = request.get_json()
+
+    if not data or not data.get('type') or not data.get('token'):
+        return jsonify({'message': 'Missing required fields'}), 400
+
+    # التحقق من نوع طريقة الدفع
+    if data['type'] not in ['credit_card', 'paypal']:
+        return jsonify({'message': 'Invalid payment method type'}), 400
+
+    # إنشاء طريقة دفع جديدة
+    payment_method = PaymentMethod(
+        user_id=current_user.id,
+        type=data['type'],
+        token=data['token'],
+        last_four=data.get('last_four', ''),
+        is_default=data.get('is_default', False)
+    )
+
+    db.session.add(payment_method)
+    db.session.commit()
+
+    return jsonify({'message': 'Payment method added successfully'}), 201
+
+@app.route('/create_payment', methods=['POST'])
+@token_required
+def create_payment(current_user):
+    data = request.get_json()
+
+    if not data or not data.get('amount') or not data.get('payment_method_id'):
+        return jsonify({'message': 'Missing required fields'}), 400
+
+    # التحقق من طريقة الدفع
+    payment_method = PaymentMethod.query.filter_by(
+        id=data['payment_method_id'],
+        user_id=current_user.id
+    ).first()
+
+    if not payment_method:
+        return jsonify({'message': 'Payment method not found'}), 404
+
+    # إنشاء معاملة جديدة
+    transaction = Transaction(
+        user_id=current_user.id,
+        amount=data['amount'],
+        payment_method_id=payment_method.id,
+        currency=data.get('currency', 'USD')
+    )
+
+    db.session.add(transaction)
+    db.session.commit()
+
+    try:
+        if payment_method.type == 'credit_card':
+            # معالجة الدفع ببطاقة الائتمان باستخدام Stripe
+            charge = stripe.Charge.create(
+                amount=int(data['amount'] * 100),  # المبلغ بالقرش
+                currency=data.get('currency', 'USD'),
+                source=payment_method.token,
+                description=f'Payment for user {current_user.id}'
+            )
+
+            transaction.status = 'completed'
+            transaction.transaction_id = charge.id
+
+        elif payment_method.type == 'paypal':
+            # معالجة الدفع باستخدام PayPal
+            payment = paypalrestsdk.Payment({
+                "intent": "sale",
+                "payer": {
+                    "payment_method": "paypal"
+                },
+                "redirect_urls": {
+                    "return_url": "http://localhost:5000/payment/execute",
+                    "cancel_url": "http://localhost:5000/payment/cancel"
+                },
+                "transactions": [{
+                    "item_list": {
+                        "items": [{
+                            "name": "Payment",
+                            "sku": "item",
+                            "price": str(data['amount']),
+                            "currency": data.get('currency', 'USD'),
+                            "quantity": 1
+                        }]
+                    },
+                    "amount": {
+                        "total": str(data['amount']),
+                        "currency": data.get('currency', 'USD')
+                    },
+                    "description": f"Payment for user {current_user.id}"
+                }]
+            })
+
+            if payment.create():
+                # تخزين معرف الدفع مؤقتًا
+                transaction.transaction_id = payment.id
+                db.session.commit()
+
+                # إعادة توجيه المستخدم إلى PayPal للموافقة
+                for link in payment.links:
+                    if link.rel == "approval_url":
+                        approval_url = link.href
+                        return jsonify({
+                            'message': 'Payment requires approval',
+                            'approval_url': approval_url,
+                            'transaction_id': transaction.id
+                        }), 200
+
+            else:
+                transaction.status = 'failed'
+                return jsonify({'message': payment.error}), 400
+
+        db.session.commit()
+        return jsonify({
+            'message': 'Payment processed successfully',
+            'transaction_id': transaction.id,
+            'status': transaction.status
+        }), 200
+
+    except Exception as e:
+        transaction.status = 'failed'
+        db.session.commit()
+        return jsonify({'message': str(e)}), 400
+
+@app.route('/payment/execute', methods=['GET'])
+def execute_payment():
+    payment_id = request.args.get('paymentId')
+    payer_id = request.args.get('PayerID')
+
+    payment = paypalrestsdk.Payment.find(payment_id)
+
+    if payment.execute({"payer_id": payer_id}):
+        # تحديث حالة المعاملة
+        transaction = Transaction.query.filter_by(transaction_id=payment_id).first()
+        if transaction:
+            transaction.status = 'completed'
+            db.session.commit()
+
+        return jsonify({'message': 'Payment executed successfully'}), 200
+    else:
+        return jsonify({'message': payment.error}), 400
+
+if __name__ == '__main__':
+    with app.app_context():
+        db.create_all()
+    app.run(ssl_context='adhoc', debug=True)
+```
+
+## 3. إجراءات الأمان المتقدمة
+
+### أ. حماية البيانات الحساسة
+
+1. **تشفير البيانات في قاعدة البيانات**:
+   ```python
+   from cryptography.fernet import Fernet
+
+   # توليد مفتاح التشفير (يجب تخزينه بأمان)
+   key = Fernet.generate_key()
+   cipher_suite = Fernet(key)
+
+   # تشفير البيانات
+   def encrypt_data(data):
+       return cipher_suite.encrypt(data.encode())
+
+   # فك تشفير البيانات
+   def decrypt_data(encrypted_data):
+       return cipher_suite.decrypt(encrypted_data).decode()
+   ```
+
+2. **استخدام الرموز المميزة (Tokens)**:
+   - بدلاً من تخزين أرقام البطاقات الكاملة، نستخدم رموز مميزة من مزودي الدفع مثل Stripe أو PayPal
+
+### ب. التحقق الثنائي العامل (2FA)
+
+```python
+import pyotp
+
+# عند تسجيل المستخدم
+def setup_2fa(user):
+    totp = pyotp.TOTP(pyotp.random_base32())
+    user.two_factor_secret = totp.secret
+    db.session.commit()
+    return totp.provisioning_uri(user.email, issuer_name="SecurePay")
+
+# عند التحقق من 2FA
+def verify_2fa(user, token):
+    totp = pyotp.TOTP(user.two_factor_secret)
+    return totp.verify(token)
+```
+
+### ج. مراقبة الأنشطة المشبوهة
+
+```python
+from flask import g
+import logging
+from logging.handlers import RotatingFileHandler
+
+# إعداد التسجيل
+handler = RotatingFileHandler('security.log', maxBytes=10000, backupCount=3)
+handler.setLevel(logging.INFO)
+app.logger.addHandler(handler)
+
+# تسجيل الأنشطة المشبوهة
+def log_suspicious_activity(user_id, activity_type, details):
+    app.logger.warning(
+        f"Suspicious activity - User: {user_id}, Type: {activity_type}, Details: {details}"
+    )
+
+# التحقق من محاولات تسجيل الدخول الفاشلة
+failed_attempts = {}
+
+@app.before_request
+def check_failed_attempts():
+    if request.endpoint == 'login':
+        ip = request.remote_addr
+        if ip in failed_attempts and failed_attempts[ip] >= 5:
+            log_suspicious_activity(None, "Brute force attempt", f"IP: {ip}")
+            return jsonify({'message': 'Too many failed attempts. Try again later.'}), 429
+```
+
+## 4. الامتثال لمعايير PCI-DSS
+
+1. **تخزين البيانات**:
+   - عدم تخزين بيانات البطاقة الكاملة (CVV, كامل رقم البطاقة)
+   - استخدام الرموز المميزة من مزودي الدفع
+
+2. **التشفير**:
+   - استخدام TLS 1.2 أو أعلى لجميع الاتصالات
+   - تشفير البيانات الحساسة في قاعدة البيانات
+
+3. **الوصول المحدود**:
+   - تطبيق مبدأ أقل الامتيازات
+   - تسجيل جميع محاولات الوصول إلى البيانات الحساسة
+
+4. **المراقبة**:
+   - تسجيل جميع أنشطة الدفع
+   - مراقبة النظام للكشف عن الأنشطة المشبوهة
+
+## 5. اختبار النظام
+
+### أ. اختبار الوحدة
+
+```python
+import unittest
+from app import app, db, User
+
+class PaymentSystemTestCase(unittest.TestCase):
+    def setUp(self):
+        app.config['TESTING'] = True
+        app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///:memory:'
+        self.app = app.test_client()
+        with app.app_context():
+            db.create_all()
+
+    def tearDown(self):
+        with app.app_context():
+            db.drop_all()
+
+    def test_user_registration(self):
+        response = self.app.post('/register', json={
+            'username': 'testuser',
+            'email': 'test@example.com',
+            'password': 'testpassword'
+        })
+        self.assertEqual(response.status_code, 201)
+
+        with app.app_context():
+            user = User.query.filter_by(username='testuser').first()
+            self.assertIsNotNone(user)
+            self.assertTrue(user.check_password('testpassword'))
+
+    def test_payment_processing(self):
+        # تسجيل المستخدم
+        self.app.post('/register', json={
+            'username': 'testuser',
+            'email': 'test@example.com',
+            'password': 'testpassword'
+        })
+
+        # تسجيل الدخول
+        login_response = self.app.post('/login', json={
+            'username': 'testuser',
+            'password': 'testpassword'
+        })
+        token = login_response.json['token']
+
+        # إضافة طريقة دفع (محاكاة)
+        response = self.app.post('/add_payment_method',
+            json={
+                'type': 'credit_card',
+                'token': 'tok_visa',  # رمز اختبار من Stripe
+                'last_four': '4242'
+            },
+            headers={'Authorization': token}
+        )
+        self.assertEqual(response.status_code, 201)
+
+        with app.app_context():
+            payment_method = PaymentMethod.query.filter_by(user_id=1).first()
+            self.assertIsNotNone(payment_method)
+
+        # إنشاء دفعة
+        response = self.app.post('/create_payment',
+            json={
+                'amount': 10.99,
+                'payment_method_id': payment_method.id
+            },
+            headers={'Authorization': token}
+        )
+        self.assertEqual(response.status_code, 200)
+
+if __name__ == '__main__':
+    unittest.main()
+```
+
+### ب. اختبار الأمان
+
+1. **اختبار اختراق**:
+   - استخدام أدوات مثل OWASP ZAP لفحص الثغرات
+   - اختبار حقن SQL
+   - اختبار XSS و CSRF
+
+2. **اختبار التوافر**:
+   - اختبار الحمل باستخدام أدوات مثل Locust
+   - اختبار استعادة النظام بعد الفشل
+
+## 6. نشر النظام
+
+### أ. بيئة الإنتاج
+
+1. **الخوادم**:
+   - استخدام خوادم منفصلة لقاعدة البيانات والتطبيق
+   - تطبيق جدران الحماية لحماية الخوادم
+
+2. **التوازن**:
+   - استخدام موازن الحمل لتوزيع الطلبات
+   - إعداد النسخ الاحتياطية التلقائية
+
+3. **المراقبة**:
+   - إعداد أدوات مراقبة مثل Prometheus و Grafana
+   - إعداد تنبيهات للأحداث الهامة
+
+### ب. تحديثات النظام
+
+1. **إدارة التبعيات**:
+   - تحديث المكتبات بانتظام
+   - فحص الثغرات الأمنية في التبعيات
+
+2. **التدقيق الأمني**:
+   - إجراء تدقيق أمني دوري
+   - اختبار الاختراق بشكل منتظم
+
+## الخلاصة
+
+هذا التصميم يقدم نظام دفع إلكتروني آمن يدعم بطاقات الائتمان و PayPal مع التركيز على:
+
+1. **الأمان**: تطبيق أفضل الممارسات في التشفير والتحقق وحماية البيانات
+2. **الامتثال**: الالتزام بمعايير PCI-DSS و GDPR
+3. **المرونة**: دعم طرق دفع متعددة وتوسيع النظام بسهولة
+4. **المراقبة**: نظام شامل لمراقبة الأنشطة والكشف عن التهديدات
+
+يمكن توسيع هذا النظام بإضافة ميزات مثل:
+- دعم العملات المشفرة
+- الدفع بالتقسيط
+- نظام المكافآت والخصومات
+- تكامل مع أنظمة المحاسبة
+
+------------------------------------------------------------
+
+[📚 الباحث]
+**نظام الدفع الإلكتروني الآمن مع دعم بطاقات الائتمان و PayPal:**
+
+## 1. نظرة عامة:
+نظام الدفع الإلكتروني المقترح هو نظام متكامل وآمن، صُمم لتوفير تجربة دفع سلسة وآمنة للمستخدمين. يدعم النظام بطاقات الائتمان و PayPal، مع التركيز على حماية بيانات المستخدمين ومعلومات الدفع.
+
+## 2. مكونات النظام:
+- **واجهة المستخدم (UI)**: واجهة سهلة الاستخدام تسمح للمستخدمين بإدخال معلومات الدفع وإتمام المعاملات بسلاسة.
+- **خادم التطبيقات**: يدير العمليات التجارية، ويتفاعل مع خوادم بطاقات الائتمان و PayPal، ويتعامل مع التحقق من الهوية ومعالجة المعاملات.
+- **خادم قاعدة البيانات**: يحفظ معلومات المستخدم ومعلومات الدفع بشكل آمن، باستخدام تقنيات التشفير لحماية البيانات الحساسة.
+- **بوابة الدفع**: تربط النظام بمقدمي خدمات الدفع الخارجيين، مثل معالج بطاقات الائتمان و PayPal API، وتتعامل مع معالجة المعاملات.
+
+## 3. تدفق البيانات:
+1. **الدخول إلى النظام**: يدخل المستخدم بيانات تسجيل الدخول (اسم المستخدم وكلمة المرور) والتي يتم تشفيرها قبل إرسالها إلى الخادم.
+2. **إدخال معلومات الدفع**: يدخل المستخدم معلومات الدفع (رقم البطاقة، تاريخ الانتهاء، رمز الأمان لبطاقات الائتمان أو معلومات حساب PayPal). يتم تشفير هذه البيانات فورًا باستخدام بروتوكول SSL/TLS.
+3. **التحقق من الهوية**: يتم التحقق من هوية المستخدم باستخدام معلومات تسجيل الدخول المقدمة، ويتم التحقق من صحة معلومات الدفع عبر خدمة التحقق من البطاقات أو API الخاص بـ PayPal.
+4. **إجراء الدفع**: يتم توجيه المستخدم إلى بوابة الدفع لاستكمال الدفع. بوابة الدفع تتعامل مع معالجة المعاملة وتأكيد نجاحها أو فشلها.
+5. **تأكيد الدفع**: يتم إرسال تأكيد الدفع إلى المستخدم عبر النظام، ويتم تحديث قاعدة البيانات بحالة المعاملة (ناجحة أو فاشلة).
+
+## 4. إجراءات الأمان:
+- **التشفير**: استخدام التشفير SSL/TLS لجميع البيانات المرسلة والمستلمة. تشفير معلومات الدفع في قاعدة البيانات باستخدام خوارزميات تشفير قوية مثل AES-256.
+- **التحقق ثنائي العامل (2FA)**: إضافة طبقة أمان إضافية عبر إرسال رمز تحقق إلى رقم الهاتف المحمول أو البريد الإلكتروني المسجل.
+- **تحديثات الأمان**: تحديث النظام بانتظام لضمان حماية المستخدمين من التهديدات الجديدة. تطبيق التصحيحات الأمنية فور توفرها.
+- **الرقابة والتحليل**: مراقبة النظام بشكل مستمر لاكتشاف أي أنشطة مشبوهة، واستخدام أدوات التحليل لتحديد الأنماط الغير طبيعية في المعاملات.
+
+## 5. الامتثال للوائح:
+- **PCI-DSS**: الامتثال لمعايير أمان بيانات بطاقة الدفع (PCI-DSS) لضمان حماية معلومات البطاقات الائتمانية.
+- **GDPR**: الامتثال لقوانين حماية البيانات العامة (GDPR) لضمان حماية البيانات الشخصية للمستخدمين في الاتحاد الأوروبي.
+- **قوانين البلدان**: الامتثال للقوانين المحلية المتعلقة بالأمان الإلكتروني في البلدان التي يعمل فيها النظام.
+
+## 6. خطة الطوارئ:
+- **استجابة للتطفل**: وضع خطة مفصلة لاستجابة الحوادث الأمنية، وتدريب فريق الدعم على كيفية التعامل مع الهجمات والحوادث الأمنية.
+- **استعادة النظام**: إنشاء نسخ احتياطية منتظمة للنظام لضمان استمرارية العمل، ووضع إجراءات استعادة البيانات في حالة حدوث خلل أو هجوم إلكتروني.
+
+## 7. ميزات إضافية:
+- دعم العملات المشفرة، والدفع بالتقسيط، ونظام المكافآت والخصومات، وتكامل مع أنظمة المحاسبة.
+
+## 8. الخلاصة:
+نظام الدفع الإلكتروني المقترح يوفر تجربة آمنة وسلسة للمستخدمين، مع ضمان حماية معلومات الدفع وامتثاله للوائح الأمنية المعمول بها. من خلال تطبيق إجراءات الأمان والامتثال للوائح، يمكن تحقيق مستوى عالٍ من الثقة والأمان في النظام، مما يضمن تجربة دفع مريحة وآمنة للمستخدمين.
+
+------------------------------------------------------------
+
+[⚡ المنفذ]
+تم تصميم نظام الدفع الإلكتروني الآمن هذا بشكل شامل ويتضمن مختلف المكونات والإجراءات الأمنية اللازمة لضمان أمان وخصوصية بيانات المستخدمين. أبرز ما يميز هذا التصميم:
+
+1. البنية المعمارية المتكاملة: تشمل واجهة المستخدم، خادم التطبيقات، قاعدة البيانات الآمنة، وبوابة الدفع المتكاملة مع مزودي الخدمات الخارجيين.
+
+2. تدفق البيانات الآمن: من تسجيل الدخول إلى إدخال بيانات الدفع وإجراء المعاملات، مع تطبيق التشفير والتحقق ثنائي العامل في كل خطوة.
+
+3. إجراءات الأمان المتقدمة: تشمل تشفير البيانات في قاعدة البيانات، استخدام الرموز المميزة، ومراقبة الأنشطة المشبوهة للكشف عن أي محاولات اختراق.
+
+4. الامتثال للوائح: الالتزام بمعايير PCI-DSS وGDPR لضمان حماية بيانات بطاقات الائتمان والبيانات الشخصية للمستخدمين.
+
+5. خطة الطوارئ الشاملة: تشمل استجابة للحوادث الأمنية واستعادة النظام في حالات الطوارئ.
+
+6. إمكانية التوسع والتحسين: النظام مصمم بمرونة لإضافة ميزات جديدة مثل دعم العملات المشفرة والدفع بالتقسيط.
+
+بشكل عام، هذا التصميم يوفر نظام دفع إلكتروني آمن ومتكامل، مع التركيز على الأمان والخصوصية والامتثال للوائح المعمول بها. يمكن تطبيقه بفعالية في بيئات الإنتاج الحقيقية.
+
+------------------------------------------------------------
+
+[🔷 الخبير المنطقي]
+### نظام الدفع الإلكتروني الآمن مع دعم بطاقات الائتمان و PayPal
+
+#### 1. نظرة عامة على النظام
+
+نظام الدفع الإلكتروني المقترح هو نظام متكامل وآمن يدعم بطاقات الائتمان و PayPal. الهدف الرئيسي هو توفير تجربة دفع سلسة وآمنة للمستخدمين، مع ضمان حماية معلومات الدفع والامتثال للوائح الأمنية المعمول بها.
+
+#### 2. مكونات النظام
+
+1. **واجهة المستخدم (UI)**:
+   - واجهة سهلة الاستخدام للمستهلكين للتفاعل مع النظام.
+   - تتيح للمستخدمين إدخال معلومات الدفع وإتمام المعاملات بسهولة.
+
+2. **خادم التطبيقات**:
+   - يدير العمليات التجارية ويتفاعل مع خوادم بطاقات الائتمان و PayPal.
+   - يتعامل مع التحقق من الهوية ومعالجة المعاملات.
+
+3. **خادم قاعدة البيانات**:
+   - يحفظ معلومات المستخدم ومعلومات الدفع بشكل آمن.
+   - يستخدم تقنيات التشفير لحماية البيانات الحساسة.
+
+4. **بوابة الدفع**:
+   - تربط النظام بمقدمي خدمات الدفع الخارجيين، مثل معالج بطاقات الائتمان و PayPal API.
+   - تتعامل مع معالجة المعاملات وتأكيد نجاحها أو فشلها.
+
+#### 3. تدفق البيانات
+
+1. **الدخول إلى النظام**:
+   - المستخدم يدخل بيانات تسجيل الدخول (اسم المستخدم وكلمة المرور).
+   - يتم تشفير هذه البيانات قبل إرسالها إلى الخادم.
+
+2. **إدخال معلومات الدفع**:
+   - المستخدم يدخل معلومات الدفع (رقم البطاقة، تاريخ الانتهاء، رمز الأمان لبطاقات الائتمان أو معلومات حساب PayPal).
+   - يتم تشفير هذه البيانات فورًا باستخدام بروتوكول SSL/TLS.
+
+3. **التحقق من الهوية**:
+   - يتم التحقق من هوية المستخدم باستخدام معلومات تسجيل الدخول المقدمة.
+   - يتم التحقق من صحة معلومات الدفع عبر خدمة التحقق من البطاقات أو API الخاص بـ PayPal.
+
+4. **إجراء الدفع**:
+   - يتم توجيه المستخدم إلى بوابة الدفع لاستكمال الدفع.
+   - بوابة الدفع تتعامل مع معالجة المعاملة وتأكيد نجاحها أو فشلها.
+
+5. **تأكيد الدفع**:
+   - يتم إرسال تأكيد الدفع إلى المستخدم عبر النظام.
+   - يتم تحديث قاعدة البيانات بحالة المعاملة (ناجحة أو فاشلة).
+
+#### 4. إجراءات الأمان
+
+1. **التشفير**:
+   - استخدام التشفير SSL/TLS لجميع البيانات المرسلة والمستلمة.
+   - تشفير معلومات الدفع في قاعدة البيانات باستخدام خوارزميات تشفير قوية مثل AES-256.
+
+2. **التحقق ثنائي العامل (2FA)**:
+   - إضافة طبقة أمان إضافية عبر إرسال رمز تحقق إلى رقم الهاتف المحمول أو البريد الإلكتروني المسجل.
+
+3. **تحديثات الأمان**:
+   - تحديث النظام بانتظام لضمان حماية المستخدمين من التهديدات الجديدة.
+   - تطبيق التصحيحات الأمنية فور توفرها.
+
+4. **الرقابة والتحليل**:
+   - مراقبة النظام بشكل مستمر لاكتشاف أي أنشطة مشبوهة.
+   - استخدام أدوات التحليل لتحديد الأنماط الغير طبيعية في المعاملات.
+
+#### 5. الامتثال للوائح
+
+1. **PCI-DSS**:
+   - الامتثال لمعايير أمان بيانات بطاقة الدفع (PCI-DSS) لضمان حماية معلومات البطاقات الائتمانية.
+
+2. **GDPR**:
+   - الامتثال لقوانين حماية البيانات العامة (GDPR) لضمان حماية البيانات الشخصية للمستخدمين في الاتحاد الأوروبي.
+
+3. **قوانين البلدان**:
+   - الامتثال للقوانين المحلية المتعلقة بالأمان الإلكتروني في البلدان التي يعمل فيها النظام.
+
+#### 6. خطة الطوارئ
+
+1. **استجابة للتطفل**:
+   - وضع خطة مفصلة لاستجابة الحوادث الأمنية.
+   - تدريب فريق الدعم على كيفية التعامل مع الهجمات والحوادث الأمنية.
+
+2. **استعادة النظام**:
+   - إنشاء نسخ احتياطية منتظمة للنظام لضمان استمرارية العمل.
+   - وضع إجراءات استعادة البيانات في حالة حدوث خلل أو هجوم إلكتروني.
+
+#### 7. تنفيذ النظام بلغة Python باستخدام Flask
+
+##### ملف `app.py` - الخادم الرئيسي
+
+```python
+from flask import Flask, request, jsonify, render_template
+from flask_sqlalchemy import SQLAlchemy
+from werkzeug.security import generate_password_hash, check_password_hash
+import requests
+import os
+from dotenv import load_dotenv
+import jwt
+import datetime
+from functools import wraps
+import stripe
+import paypalrestsdk
+
+# تحميل المتغيرات البيئية
+load_dotenv()
+
+app = Flask(__name__)
+
+# إعداد قاعدة البيانات
+app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql://user:password@localhost/payment_db'
+app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
+app.config['SECRET_KEY'] = os.getenv('SECRET_KEY')
+app.config['STRIPE_SECRET_KEY'] = os.getenv('STRIPE_SECRET_KEY')
+app.config['PAYPAL_CLIENT_ID'] = os.getenv('PAYPAL_CLIENT_ID')
+app.config['PAYPAL_CLIENT_SECRET'] = os.getenv('PAYPAL_CLIENT_SECRET')
+
+db = SQLAlchemy(app)
+
+# إعداد Stripe
+stripe.api_key = app.config['STRIPE_SECRET_KEY']
+
+# إعداد PayPal
+paypalrestsdk.configure({
+    "mode": "sandbox",  # أو "live" للإنتاج
+    "client_id": app.config['PAYPAL_CLIENT_ID'],
+    "client_secret": app.config['PAYPAL_CLIENT_SECRET']
+})
+
+# نماذج قاعدة البيانات
+class User(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    username = db.Column(db.String(80), unique=True, nullable=False)
+    email = db.Column(db.String(120), unique=True, nullable=False)
+    password_hash = db.Column(db.String(128))
+    phone = db.Column(db.String(20))
+    two_factor_secret = db.Column(db.String(32))
+
+    def set_password(self, password):
+        self.password_hash = generate_password_hash(password)
+
+    def check_password(self, password):
+        return check_password_hash(self.password_hash, password)
+
+class PaymentMethod(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
+    type = db.Column(db.String(20), nullable=False)  # 'credit_card' or 'paypal'
+    token = db.Column(db.String(255), nullable=False)  # رمز مميز للبطاقة أو PayPal
+    last_four = db.Column(db.String(4))  # آخر 4 أرقام للبطاقة
+    is_default = db.Column(db.Boolean, default=False)
+
+class Transaction(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
+    amount = db.Column(db.Float, nullable=False)
+    currency = db.Column(db.String(3), default='USD')
+    payment_method_id = db.Column(db.Integer, db.ForeignKey('payment_method.id'))
+    status = db.Column(db.String(20), default='pending')  # pending, completed, failed
+    transaction_id = db.Column(db.String(255))  # معرف المعاملة من مزود الدفع
+    created_at = db.Column(db.DateTime, default=datetime.datetime.utcnow)
+
+# دالة للتحقق من التوكن
+def token_required(f):
+    @wraps(f)
+    def decorated(*args, **kwargs):
+        token = request.headers.get('Authorization')
+        if not token:
+            return jsonify({'message': 'Token is missing!'}), 403
+        try:
+            data = jwt.decode(token, app.config['SECRET_KEY'], algorithms=["HS256"])
+            current_user = User.query.get(data['user_id'])
+        except:
+            return jsonify({'message': 'Token is invalid!'}), 403
+        return f(current_user, *args, **kwargs)
+    return decorated
+
+# مسارات API
+@app.route('/register', methods=['POST'])
+def register():
+    data = request.get_json()
+
+    # التحقق من البيانات
+    if not data or not data.get('username') or not data.get('email') or not data.get('password'):
+        return jsonify({'message': 'Missing required fields'}), 400
+
+    # التحقق من وجود المستخدم
+    if User.query.filter_by(username=data['username']).first():
+        return jsonify({'message': 'Username already exists'}), 400
+
+    if User.query.filter_by(email=data['email']).first():
+        return jsonify({'message': 'Email already exists'}), 400
+
+    # إنشاء المستخدم
+    user = User(username=data['username'], email=data['email'])
+    user.set_password(data['password'])
+    db.session.add(user)
+    db.session.commit()
+
+    return jsonify({'message': 'User created successfully'}), 201
+
+@app.route('/login', methods=['POST'])
+def login():
+    data = request.get_json()
+
+    if not data or not data.get('username') or not data.get('password'):
+        return jsonify({'message': 'Missing username or password'}), 400
+
+    user = User.query.filter_by(username=data['username']).first()
+
+    if not user or not user.check_password(data['password']):
+        return jsonify({'message': 'Invalid username or password'}), 401
+
+    # إنشاء توكن JWT
+    token = jwt.encode({
+        'user_id': user.id,
+        'exp': datetime.datetime.utcnow() + datetime.timedelta(hours=24)
+    }, app.config['SECRET_KEY'], algorithm="HS256")
+
+    return jsonify({'token': token}), 200
+
+@app.route('/add_payment_method', methods=['POST'])
+@token_required
+def add_payment_method(current_user):
+    data = request.get_json()
+
+    if not data or not data.get('type') or not data.get('token'):
+        return jsonify({'message': 'Missing required fields'}), 400
+
+    # التحقق من نوع طريقة الدفع
+    if data['type'] not in ['credit_card', 'paypal']:
+        return jsonify({'message': 'Invalid payment method type'}), 400
+
+    # إنشاء طريقة دفع جديدة
+    payment_method = PaymentMethod(
+        user_id=current_user.id,
+        type=data['type'],
+        token=data['token'],
+        last_four=data.get('last_four', ''),
+        is_default=data.get('is_default', False)
+    )
+
+    db.session.add(payment_method)
+    db.session.commit()
+
+    return jsonify({'message': 'Payment method added successfully'}), 201
+
+@app.route('/create_payment', methods=['POST'])
+@token_required
+def create_payment(current_user):
+    data = request.get_json()
+
+    if not data or not data.get('amount') or not data.get('payment_method_id'):
+        return jsonify({'message': 'Missing required fields'}), 400
+
+    # التحقق من طريقة الدفع
+    payment_method = PaymentMethod.query.filter_by(
+        id=data['payment_method_id'],
+        user_id=current_user.id
+    ).first()
+
+    if not payment_method:
+        return jsonify({'message': 'Payment method not found'}), 404
+
+    # إنشاء معاملة جديدة
+    transaction = Transaction(
+        user_id=current_user.id,
+        amount=data['amount'],
+        payment_method_id=payment_method.id,
+        currency=data.get('currency', 'USD')
+    )
+
+    db.session.add(transaction)
+    db.session.commit()
+
+    try:
+        if payment_method.type == 'credit_card':
+            # معالجة الدفع ببطاقة الائتمان باستخدام Stripe
+            charge = stripe.Charge.create(
+                amount=int(data['amount'] * 100),  # المبلغ بالقرش
+                currency=data.get('currency', 'USD'),
+                source=payment_method.token,
+                description=f'Payment for user {current_user.id}'
+            )
+
+            transaction.status = 'completed'
+            transaction.transaction_id = charge.id
+
+        elif payment_method.type == 'paypal':
+            # معالجة الدفع باستخدام PayPal
+            payment = paypalrestsdk.Payment({
+                "intent": "sale",
+                "payer": {
+                    "payment_method": "paypal"
+                },
+                "redirect_urls": {
+                    "return_url": "http://localhost:5000/payment/execute",
+                    "cancel_url": "http://localhost:5000/payment/cancel"
+                },
+                "transactions": [{
+                    "item_list": {
+                        "items": [{
+                            "name": "Payment",
+                            "sku": "item",
+                            "price": str(data['amount']),
+                            "currency": data.get('currency', 'USD'),
+                            "quantity": 1
+                        }]
+                    },
+                    "amount": {
+                        "total": str(data['amount']),
+                        "currency": data.get('currency', 'USD')
+                    },
+                    "description": f"Payment for user {current_user.id}"
+                }]
+            })
+
+            if payment.create():
+                # تخزين معرف الدفع مؤقتًا
+                transaction.transaction_id = payment.id
+                db.session.commit()
+
+                # إعادة توجيه المستخدم إلى PayPal للموافقة
+                for link in payment.links:
+                    if link.rel == "approval_url":
+                        approval_url = link.href
+                        return jsonify({
+                            'message': 'Payment requires approval',
+                            'approval_url': approval_url,
+                            'transaction_id': transaction.id
+                        }), 200
+
+            else:
+                transaction.status = 'failed'
+                return jsonify({'message': payment.error}), 400
+
+        db.session.commit()
+        return jsonify({
+            'message': 'Payment processed successfully',
+            'transaction_id': transaction.id,
+            'status': transaction.status
+        }), 200
+
+    except Exception as e:
+        transaction.status = 'failed'
+        db.session.commit()
+        return jsonify({'message': str(e)}), 400
+
+@app.route('/payment/execute', methods=['GET'])
+def execute_payment():
+    payment_id = request.args.get('paymentId')
+    payer_id = request.args.get('PayerID')
+
+    payment = paypalrestsdk.Payment.find(payment_id)
+
+    if payment.execute({"payer_id": payer_id}):
+        # تحديث حالة المعاملة
+        transaction = Transaction.query.filter_by(transaction_id=payment_id).first()
+        if transaction:
+            transaction.status = 'completed'
+            db.session.commit()
+
+        return jsonify({'message': 'Payment executed successfully'}), 200
+    else:
+        return jsonify({'message': payment.error}), 400
+
+if __name__ == '__main__':
+    with app.app_context():
+        db.create_all()
+    app.run(ssl_context='adhoc', debug=True)
+```
+
+#### 8. إجراءات الأمان المتقدمة
+
+##### حماية البيانات الحساسة
+
+1. **تشفير البيانات في قاعدة البيانات**:
+   ```python
+   from cryptography.fernet import Fernet
+
+   # توليد مفتاح التشفير (يجب تخزينه بأمان)
+   key = Fernet.generate_key()
+   cipher_suite = Fernet(key)
+
+   # تشفير البيانات
+   def encrypt_data(data):
+       return cipher_suite.encrypt(data.encode())
+
+   # فك تشفير البيانات
+   def decrypt_data(encrypted_data):
+       return cipher_suite.decrypt(encrypted_data).decode()
+   ```
+
+2. **استخدام الرموز المميزة (Tokens)**:
+   - بدلاً من تخزين أرقام البطاقات الكاملة، نستخدم رموز مميزة من مزودي الدفع مثل Stripe أو PayPal.
+
+##### التحقق الثنائي العامل (2FA)
+
+```python
+import pyotp
+
+# عند تسجيل المستخدم
+def setup_2fa(user):
+    totp = pyotp.TOTP(pyotp.random_base32())
+    user.two_factor_secret = totp.secret
+    db.session.commit()
+    return totp.provisioning_uri(user.email, issuer_name="SecurePay")
+
+# عند التحقق من 2FA
+def verify_2fa(user, token):
+    totp = pyotp.TOTP(user.two_factor_secret)
+    return totp.verify(token)
+```
+
+##### مراقبة الأنشطة المشبوهة
+
+```python
+from flask import g
+import logging
+from logging.handlers import RotatingFileHandler
+
+# إعداد التسجيل
+handler = RotatingFileHandler('security.log', maxBytes=10000, backupCount=3)
+handler.setLevel(logging.INFO)
+app.logger.addHandler(handler)
+
+# تسجيل الأنشطة المشبوهة
+def log_suspicious_activity(user_id, activity_type, details):
+    app.logger.warning(
+        f"Suspicious activity - User: {user_id}, Type: {activity_type}, Details: {details}"
+    )
+
+# التحقق من محاولات تسجيل الدخول الفاشلة
+failed_attempts = {}
+
+@app.before_request
+def check_failed_attempts():
+    if request.endpoint == 'login':
+        ip = request.remote_addr
+        if ip in failed_attempts and failed_attempts[ip] >= 5:
+            log_suspicious_activity(None, "Brute force attempt", f"IP: {ip}")
+            return jsonify({'message': 'Too many failed attempts. Try again later.'}), 429
+```
+
+#### 9. اختبار النظام
+
+##### اختبار الوحدة
+
+```python
+import unittest
+from app import app, db, User
+
+class PaymentSystemTestCase(unittest.TestCase):
+    def setUp(self):
+        app.config['TESTING'] = True
+        app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///:memory:'
+        self.app = app.test_client()
+        with app.app_context():
+            db.create_all()
+
+    def tearDown(self):
+        with app.app_context():
+            db.drop_all()
+
+    def test_user_registration(self):
+        response = self.app.post('/register', json={
+            'username': 'testuser',
+            'email': 'test@example.com',
+            'password': 'testpassword'
+        })
+        self.assertEqual(response.status_code, 201)
+
+        with app.app_context():
+            user = User.query.filter_by(username='testuser').first()
+            self.assertIsNotNone(user)
+            self.assertTrue(user.check_password('testpassword'))
+
+    def test_payment_processing(self):
+        # تسجيل المستخدم
+        self.app.post('/register', json={
+            'username': 'testuser',
+            'email': 'test@example.com',
+            'password': 'testpassword'
+        })
+
+        # تسجيل الدخول
+        login_response = self.app.post('/login', json={
+            'username': 'testuser',
+            'password': 'testpassword'
+        })
+        token = login_response.json['token']
+
+        # إضافة طريقة دفع (محاكاة)
+        response = self.app.post('/add_payment_method',
+            json={
+                'type': 'credit_card',
+                'token': 'tok_visa',  # رمز اختبار من Stripe
+                'last_four': '4242'
+            },
+            headers={'Authorization': token}
+        )
+        self.assertEqual(response.status_code, 201)
+
+        with app.app_context():
+            payment_method = PaymentMethod.query.filter_by(user_id=1).first()
+            self.assertIsNotNone(payment_method)
+
+        # إنشاء دفعة
+        response = self.app.post('/create_payment',
+            json={
+                'amount': 10.99,
+                'payment_method_id': payment_method.id
+            },
+            headers={'Authorization': token}
+        )
+        self.assertEqual(response.status_code, 200)
+
+if __name__ == '__main__':
+    unittest.main()
+```
+
+##### اختبار الأمان
+
+1. **اختبار اختراق**:
+   - استخدام أدوات مثل OWASP ZAP لفحص الثغرات.
+   - اختبار حقن SQL.
+   - اختبار XSS و CSRF.
+
+2. **اختبار التوافر**:
+   - اختبار الحمل باستخدام أدوات مثل Locust.
+   - اختبار استعادة النظام بعد الفشل.
+
+#### 10. نشر النظام
+
+##### بيئة الإنتاج
+
+1. **الخوادم**:
+   - استخدام خوادم منفصلة لقاعدة البيانات والتطبيق.
+   - تطبيق جدران الحماية لحماية الخوادم.
+
+2. **التوازن**:
+   - استخدام موازن الحمل لتوزيع الطلبات.
+   - إعداد النسخ الاحتياطية التلقائية.
+
+3. **المراقبة**:
+   - إعداد أدوات مراقبة مثل Prometheus و Grafana.
+   - إعداد تنبيهات للأحداث الهامة.
+
+##### تحديثات النظام
+
+1. **إدارة التبعيات**:
+   - تحديث المكتبات بانتظام.
+   - فحص الثغرات الأمنية في التبعيات.
+
+2. **التدقيق الأمني**:
+   - إجراء تدقيق أمني دوري.
+   - اختبار الاختراق بشكل منتظم.
+
+#### 11. الخلاصة
+
+هذا التصميم يقدم نظام دفع إلكتروني آمن يدعم بطاقات الائتمان و PayPal مع التركيز على:
+
+1. **الأمان**: تطبيق أفضل الممارسات في التشفير والتحقق وحماية البيانات.
+2. **الامتثال**: الالتزام بمعايير PCI-DSS و GDPR.
+3. **المرونة**: دعم طرق دفع متعددة وتوسيع النظام بسهولة.
+4. **المراقبة**: نظام شامل لمراقبة الأنشطة والكشف عن التهديدات.
+
+يمكن توسيع هذا النظام بإضافة ميزات مثل:
+- دعم العملات المشفرة.
+- الدفع بالتقسيط.
+- نظام المكافآت والخصومات.
+- تكامل مع أنظمة المحاسبة.
+
+بهذا الشكل، يمكن تحقيق نظام دفع إلكتروني آمن ومتكامل يوفر تجربة دفع مريحة وآمنة للمستخدمين.
+
+------------------------------------------------------------

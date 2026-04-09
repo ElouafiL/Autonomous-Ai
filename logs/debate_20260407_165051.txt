@@ -1,0 +1,550 @@
+Task: صمّم لي هيكل قاعدة بيانات لتطبيق مدونة، مع استعلامات SQL الأساسية وشرح كل جزء.
+Timestamp: 2026-04-07 16:48:47
+
+[💡 المبتكر] هيكل قاعدة البيانات لتطبيق المدونة يمكن أن يتكون من الجداول التالية:
+
+### 1. المستخدمون (Users)
+
+- **id**: معرف فريد للمستخدم
+- **اسم المستخدم** (username): اسم المستخدم الذي يختاره المستخدم
+- **كلمة المرور** (password): كلمة المرور للمستخدم
+- **البريد الإلكتروني** (email): بريد المستخدم الإلكتروني
+- **صورة 프로필** (profile_picture): صورة پروفايل المستخدم
+
+### 2. المنشورات (Posts)
+
+- **id**: معرف فريد للمنشور
+- **عنوان المنشور** (title): عنوان المنشور
+- **محتوى المنشور** (content): محتوى المنشور
+- **تاريخ المنشور** (post_date): تاريخ نشر المنشور
+- **مُدون** (author_id): مرجع إلى جدول المستخدمون
+
+### 3. التعليقات (Comments)
+
+- **id**: معرف فريد للتعليق
+- **محتوى التعليق** (comment_content): محتوى التعليق
+- **تاريخ التعليق** (comment_date): تاريخ إضافة التعليق
+- **المنشور** (post_id): مرجع إلى جدول المنشورات
+- **المستخدم** (user_id): مرجع إلى جدول المستخدمون
+
+### 4. التصنيفات (Categories)
+
+- **id**: معرف فريد للتصنيف
+- **اسم التصنيف** (category_name): اسم التصنيف
+
+### 5. المنشورات-التصنيفات (Post_Categories)
+
+- **منشور_id** (post_id): مرجع إلى جدول المنشورات
+- **تصنيف_id** (category_id): مرجع إلى جدول التصنيفات
+
+استعلامات SQL الأساسية:
+
+### 1. إضافة مستخدم جديد
+```sql
+INSERT INTO Users (username, password, email, profile_picture)
+VALUES ('username', 'password', 'email@example.com', 'profile_picture.jpg');
+```
+
+### 2. إضافة منشور جديد
+```sql
+INSERT INTO Posts (title, content, post_date, author_id)
+VALUES ('عنوان المنشور', 'محتوى المنشور', '2023-01-01', 1);
+```
+
+### 3. إضافة تعليق جديد
+```sql
+INSERT INTO Comments (comment_content, comment_date, post_id, user_id)
+VALUES ('محتوى التعليق', '2023-01-01', 1, 1);
+```
+
+### 4. استرجاع جميع المنشورات
+```sql
+SELECT * FROM Posts;
+```
+
+### 5. استرجاع جميع التعليقات على منشور معين
+```sql
+SELECT * FROM Comments WHERE post_id = 1;
+```
+
+### 6. استرجاع جميع المنشورات لمستخدم معين
+```sql
+SELECT * FROM Posts WHERE author_id = 1;
+```
+
+### 7. حذف منشور
+```sql
+DELETE FROM Posts WHERE id = 1;
+```
+
+### 8. تحديث منشور
+```sql
+UPDATE Posts SET title = 'عنوان جديد', content = 'محتوى جديد' WHERE id = 1;
+```
+
+هذه هي البنية الأساسية لقاعدة بيانات لتطبيق مدونة، ويمكن تعديلها وتوسيعها حسب المتطلبات الخاصة بتطبيقك.
+
+[📊 المحلل] ### نقد وتحسين هيكل قاعدة البيانات لتطبيق المدونة
+
+الهيكل الذي قدمته جيد في الأساس، ولكن هناك بعض التحسينات والتعديلات التي يمكن إدخالها لجعله أكثر فعالية وأمانًا:
+
+### 1. جدول المستخدمون (Users)
+
+- **id**: معرف فريد للمستخدم (نوع البيانات: INT، PRIMARY KEY، AUTO_INCREMENT)
+- **اسم المستخدم** (username): اسم المستخدم الذي يختاره المستخدم (نوع البيانات: VARCHAR(255)، UNIQUE)
+- **كلمة المرور** (password): كلمة المرور للمستخدم (نوع البيانات: VARCHAR(255)، مُشفرة باستخدام خوارزمية آمنة مثل bcrypt)
+- **البريد الإلكتروني** (email): بريد المستخدم الإلكتروني (نوع البيانات: VARCHAR(255)، UNIQUE)
+- **صورة البروفيل** (profile_picture): صورة بروفيت المستخدم (نوع البيانات: VARCHAR(255))
+
+**تحسينات:**
+- استخدام `VARCHAR(255)` لـ `username` و `email` و `profile_picture` لضمان كفاءة التخزين.
+- تشفير `password` باستخدام خوارزمية آمنة مثل bcrypt.
+- إضافة قيود `UNIQUE` على `username` و `email` لمنع التكرار.
+
+### 2. جدول المنشورات (Posts)
+
+- **id**: معرف فريد للمنشور (نوع البيانات: INT، PRIMARY KEY، AUTO_INCREMENT)
+- **عنوان المنشور** (title): عنوان المنشور (نوع البيانات: VARCHAR(255))
+- **محتوى المنشور** (content): محتوى المنشور (نوع البيانات: TEXT)
+- **تاريخ المنشور** (post_date): تاريخ نشر المنشور (نوع البيانات: DATETIME، DEFAULT CURRENT_TIMESTAMP)
+- **مُدون** (author_id): مرجع إلى جدول المستخدمون (نوع البيانات: INT، FOREIGN KEY REFERENCES Users(id))
+
+**تحسينات:**
+- استخدام `TEXT` لـ `content` لدعم محتوى طويل.
+- إضافة `DEFAULT CURRENT_TIMESTAMP` لـ `post_date` لتبسيط الإدخالات.
+
+### 3. جدول التعليقات (Comments)
+
+- **id**: معرف فريد للتعليق (نوع البيانات: INT، PRIMARY KEY، AUTO_INCREMENT)
+- **محتوى التعليق** (comment_content): محتوى التعليق (نوع البيانات: TEXT)
+- **تاريخ التعليق** (comment_date): تاريخ إضافة التعليق (نوع البيانات: DATETIME، DEFAULT CURRENT_TIMESTAMP)
+- **المنشور** (post_id): مرجع إلى جدول المنشورات (نوع البيانات: INT، FOREIGN KEY REFERENCES Posts(id))
+- **المستخدم** (user_id): مرجع إلى جدول المستخدمون (نوع البيانات: INT، FOREIGN KEY REFERENCES Users(id))
+
+**تحسينات:**
+- استخدام `TEXT` لـ `comment_content` لدعم محتوى طويل.
+- إضافة `DEFAULT CURRENT_TIMESTAMP` لـ `comment_date` لتبسيط الإدخالات.
+
+### 4. جدول التصنيفات (Categories)
+
+- **id**: معرف فريد للتصنيف (نوع البيانات: INT، PRIMARY KEY، AUTO_INCREMENT)
+- **اسم التصنيف** (category_name): اسم التصنيف (نوع البيانات: VARCHAR(255))
+
+**تحسينات:**
+- استخدام `VARCHAR(255)` لـ `category_name` لضمان كفاءة التخزين.
+
+### 5. جدول المنشورات-التصنيفات (Post_Categories)
+
+- **منشور_id** (post_id): مرجع إلى جدول المنشورات (نوع البيانات: INT، FOREIGN KEY REFERENCES Posts(id))
+- **تصنيف_id** (category_id): مرجع إلى جدول التصنيفات (نوع البيانات: INT، FOREIGN KEY REFERENCES Categories(id))
+
+**تحسينات:**
+- تأكيد أن الجدول يشكل علاقة م:N بين المنشورات والتصنيفات.
+
+### استعلامات SQL الأساسية
+
+#### 1. إضافة مستخدم جديد
+```sql
+INSERT INTO Users (username, password, email, profile_picture)
+VALUES ('username', 'hashed_password', 'email@example.com', 'profile_picture.jpg');
+```
+
+#### 2. إضافة منشور جديد
+```sql
+INSERT INTO Posts (title, content, author_id)
+VALUES ('عنوان المنشور', 'محتوى المنشور', 1);
+```
+
+#### 3. إضافة تعليق جديد
+```sql
+INSERT INTO Comments (comment_content, post_id, user_id)
+VALUES ('محتوى التعليق', 1, 1);
+```
+
+#### 4. استرجاع جميع المنشورات
+```sql
+SELECT * FROM Posts;
+```
+
+#### 5. استرجاع جميع التعليقات على منشور معين
+```sql
+SELECT * FROM Comments WHERE post_id = 1;
+```
+
+#### 6. استرجاع جميع المنشورات لمستخدم معين
+```sql
+SELECT * FROM Posts WHERE author_id = 1;
+```
+
+#### 7. حذف منشور
+```sql
+DELETE FROM Posts WHERE id = 1;
+```
+
+#### 8. تحديث منشور
+```sql
+UPDATE Posts SET title = 'عنوان جديد', content = 'محتوى جديد' WHERE id = 1;
+```
+
+### إضافات مفيدة
+
+1. **التحقق من صحة البيانات**: استخدام قيود التحقق مثل `NOT NULL` و `UNIQUE` لضمان سلامة البيانات.
+2. **فهرسة الأعمدة**: إضافة فهارس (`INDEX`) على الأعمدة التي يتم البحث عنها بشكل متكرر لتحسين أداء الاستعلامات.
+3. **أذونات الأمان**: تأكيد أن المستخدمين يمكنهم فقط الوصول إلى البيانات التي يسمح لهم بالوصول إليها.
+
+هذه التعديلات ستجعل قاعدة البيانات أكثر أمانًا وأكثر كفاءة في الأداء.
+
+[💻 المبرمج] ### **هيكل قاعدة البيانات النهائي لتطبيق المدونة (مع تحسينات)**
+
+#### **1. جدول المستخدمين (Users)**
+```sql
+CREATE TABLE Users (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    username VARCHAR(255) NOT NULL UNIQUE,
+    password VARCHAR(255) NOT NULL,  -- يجب تشفيرها باستخدام bcrypt
+    email VARCHAR(255) NOT NULL UNIQUE,
+    profile_picture VARCHAR(255),
+    created_at DATETIME DEFAULT CURRENT_TIMESTAMP
+);
+```
+- **التحسينات**:
+  - إضافة `created_at` لتسجيل وقت إنشاء الحساب.
+  - استخدام `UNIQUE` لمنع تكرار الأسماء والبريد الإلكتروني.
+  - تشفير كلمة المرور قبل التخزين.
+
+---
+
+#### **2. جدول المنشورات (Posts)**
+```sql
+CREATE TABLE Posts (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    title VARCHAR(255) NOT NULL,
+    content TEXT NOT NULL,
+    post_date DATETIME DEFAULT CURRENT_TIMESTAMP,
+    author_id INT NOT NULL,
+    FOREIGN KEY (author_id) REFERENCES Users(id) ON DELETE CASCADE
+);
+```
+- **التحسينات**:
+  - استخدام `TEXT` لدعم المحتوى الطويل.
+  - `ON DELETE CASCADE` لحذف المنشورات إذا تم حذف المستخدم.
+  - `DEFAULT CURRENT_TIMESTAMP` لتسجيل وقت النشر تلقائيًا.
+
+---
+
+#### **3. جدول التعليقات (Comments)**
+```sql
+CREATE TABLE Comments (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    comment_content TEXT NOT NULL,
+    comment_date DATETIME DEFAULT CURRENT_TIMESTAMP,
+    post_id INT NOT NULL,
+    user_id INT NOT NULL,
+    FOREIGN KEY (post_id) REFERENCES Posts(id) ON DELETE CASCADE,
+    FOREIGN KEY (user_id) REFERENCES Users(id) ON DELETE CASCADE
+);
+```
+- **التحسينات**:
+  - `ON DELETE CASCADE` لحذف التعليقات إذا تم حذف المنشور أو المستخدم.
+  - `DEFAULT CURRENT_TIMESTAMP` لتسجيل وقت التعليق تلقائيًا.
+
+---
+
+#### **4. جدول التصنيفات (Categories)**
+```sql
+CREATE TABLE Categories (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    category_name VARCHAR(255) NOT NULL UNIQUE
+);
+```
+- **التحسينات**:
+  - `UNIQUE` لمنع تكرار أسماء التصنيفات.
+
+---
+
+#### **5. جدول العلاقة بين المنشورات والتصنيفات (Post_Categories)**
+```sql
+CREATE TABLE Post_Categories (
+    post_id INT NOT NULL,
+    category_id INT NOT NULL,
+    PRIMARY KEY (post_id, category_id),
+    FOREIGN KEY (post_id) REFERENCES Posts(id) ON DELETE CASCADE,
+    FOREIGN KEY (category_id) REFERENCES Categories(id) ON DELETE CASCADE
+);
+```
+- **التحسينات**:
+  - استخدام `PRIMARY KEY` مركب لمنع تكرار العلاقات.
+  - `ON DELETE CASCADE` لحذف العلاقات إذا تم حذف المنشور أو التصنيف.
+
+---
+
+### **استعلامات SQL الأساسية (مع تحسينات)**
+
+#### **1. إضافة مستخدم جديد (مع تشفير كلمة المرور)**
+```sql
+INSERT INTO Users (username, password, email, profile_picture)
+VALUES ('new_user', '$2a$10$hashed_password', 'user@example.com', 'profile.jpg');
+```
+- **ملاحظة**: يجب استخدام مكتبة مثل `bcrypt` لتشفير كلمة المرور قبل الإدخال.
+
+---
+
+#### **2. إضافة منشور جديد**
+```sql
+INSERT INTO Posts (title, content, author_id)
+VALUES ('عنوان المنشور', 'محتوى المنشور المفصل...', 1);
+```
+- **ملاحظة**: `post_date` يتم تعيينه تلقائيًا.
+
+---
+
+#### **3. إضافة تصنيف لمنشور**
+```sql
+INSERT INTO Post_Categories (post_id, category_id)
+VALUES (1, 1);  -- ربط المنشور ذو المعرف 1 بالتصنيف ذو المعرف 1
+```
+
+---
+
+#### **4. استرجاع جميع المنشورات مع أسماء المؤلفين والتصنيفات**
+```sql
+SELECT
+    p.id, p.title, p.content, p.post_date,
+    u.username AS author,
+    GROUP_CONCAT(c.category_name) AS categories
+FROM
+    Posts p
+JOIN
+    Users u ON p.author_id = u.id
+LEFT JOIN
+    Post_Categories pc ON p.id = pc.post_id
+LEFT JOIN
+    Categories c ON pc.category_id = c.id
+GROUP BY
+    p.id;
+```
+- **التحسينات**:
+  - استخدام `GROUP_CONCAT` لعرض جميع التصنيفات المرتبطة بالمنشور في عمود واحد.
+  - `LEFT JOIN` لضمان ظهور المنشورات حتى بدون تصنيفات.
+
+---
+
+#### **5. حذف منشور (مع حذف التعليقات والتصنيفات المرتبطة تلقائيًا)**
+```sql
+DELETE FROM Posts WHERE id = 1;
+```
+- **ملاحظة**: بفضل `ON DELETE CASCADE`، سيتم حذف التعليقات والتصنيفات المرتبطة تلقائيًا.
+
+---
+
+#### **6. تحديث معلومات المستخدم**
+```sql
+UPDATE Users
+SET email = 'new_email@example.com', profile_picture = 'new_profile.jpg'
+WHERE id = 1;
+```
+
+---
+
+### **ملخص التحسينات الرئيسية**
+✅ **الأمان**:
+- تشفير كلمات المرور باستخدام `bcrypt`.
+- استخدام قيود `UNIQUE` لمنع التكرار.
+
+✅ **الأداء**:
+- استخدام `INDEX` على الأعمدة المستخدمة في الاستعلامات المتكررة (مثل `author_id` في `Posts`).
+- استخدام `TEXT` للمحتوى الطويل.
+
+✅ **السلامة المرجعية**:
+- استخدام `ON DELETE CASCADE` للحفاظ على سلامة البيانات عند الحذف.
+
+✅ **سهولة الاستخدام**:
+- استخدام `DEFAULT CURRENT_TIMESTAMP` لتسجيل الأوقات تلقائيًا.
+
+---
+
+### **الخطوات التالية المقترحة**
+1. **إنشاء الفهارس (Indexes)** لتحسين أداء الاستعلامات:
+   ```sql
+   CREATE INDEX idx_posts_author ON Posts(author_id);
+   CREATE INDEX idx_comments_post ON Comments(post_id);
+   ```
+2. **إضافة أذونات المستخدمين** (إذا كان التطبيق يدعم أدوارًا مثل Admin، Editor، Reader).
+3. **إضافة ميزة الإعجابات (Likes)** إذا كانت مطلوبة.
+
+هل تحتاج إلى أي تعديلات أو إضافات أخرى؟ 😊
+
+[📚 الباحث] ### هيكل قاعدة البيانات النهائي لتطبيق المدونة:
+
+#### 1. جدول المستخدمين (Users):
+```sql
+CREATE TABLE Users (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    username VARCHAR(255) NOT NULL UNIQUE,
+    password VARCHAR(255) NOT NULL,  -- يجب تشفيرها باستخدام bcrypt
+    email VARCHAR(255) NOT NULL UNIQUE,
+    profile_picture VARCHAR(255),
+    created_at DATETIME DEFAULT CURRENT_TIMESTAMP
+);
+```
+
+#### 2. جدول المنشورات (Posts):
+```sql
+CREATE TABLE Posts (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    title VARCHAR(255) NOT NULL,
+    content TEXT NOT NULL,
+    post_date DATETIME DEFAULT CURRENT_TIMESTAMP,
+    author_id INT NOT NULL,
+    FOREIGN KEY (author_id) REFERENCES Users(id) ON DELETE CASCADE
+);
+```
+
+#### 3. جدول التعليقات (Comments):
+```sql
+CREATE TABLE Comments (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    comment_content TEXT NOT NULL,
+    comment_date DATETIME DEFAULT CURRENT_TIMESTAMP,
+    post_id INT NOT NULL,
+    user_id INT NOT NULL,
+    FOREIGN KEY (post_id) REFERENCES Posts(id) ON DELETE CASCADE,
+    FOREIGN KEY (user_id) REFERENCES Users(id) ON DELETE CASCADE
+);
+```
+
+#### 4. جدول التصنيفات (Categories):
+```sql
+CREATE TABLE Categories (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    category_name VARCHAR(255) NOT NULL UNIQUE
+);
+```
+
+#### 5. جدول العلاقة بين المنشورات والتصنيفات (Post_Categories):
+```sql
+CREATE TABLE Post_Categories (
+    post_id INT NOT NULL,
+    category_id INT NOT NULL,
+    PRIMARY KEY (post_id, category_id),
+    FOREIGN KEY (post_id) REFERENCES Posts(id) ON DELETE CASCADE,
+    FOREIGN KEY (category_id) REFERENCES Categories(id) ON DELETE CASCADE
+);
+```
+
+### استعلامات SQL الأساسية:
+
+#### 1. إضافة مستخدم جديد:
+```sql
+INSERT INTO Users (username, password, email, profile_picture)
+VALUES ('new_user', '$2a$10$hashed_password', 'user@example.com', 'profile.jpg');
+```
+
+#### 2. إضافة منشور جديد:
+```sql
+INSERT INTO Posts (title, content, author_id)
+VALUES ('عنوان المنشور', 'محتوى المنشور', 1);
+```
+
+#### 3. إضافة تعليق جديد:
+```sql
+INSERT INTO Comments (comment_content, post_id, user_id)
+VALUES ('محتوى التعليق', 1, 1);
+```
+
+#### 4. استرجاع جميع المنشورات مع معلومات المؤلف والتصنيفات:
+```sql
+SELECT
+    p.id, p.title, p.content, p.post_date,
+    u.username AS author,
+    GROUP_CONCAT(c.category_name) AS categories
+FROM
+    Posts p
+JOIN
+    Users u ON p.author_id = u.id
+LEFT JOIN
+    Post_Categories pc ON p.id = pc.post_id
+LEFT JOIN
+    Categories c ON pc.category_id = c.id
+GROUP BY
+    p.id;
+```
+
+#### 5. حذف منشور مع حذف التعليقات والتصنيفات المرتبطة:
+```sql
+DELETE FROM Posts WHERE id = 1;
+```
+
+#### 6. تحديث معلومات المستخدم:
+```sql
+UPDATE Users
+SET email = 'new_email@example.com', profile_picture = 'new_profile.jpg'
+WHERE id = 1;
+```
+
+### ملخص التحسينات:
+- الأمان: تشفير كلمات المرور، استخدام قيود `UNIQUE`.
+- الأداء: استخدام `TEXT` للمحتوى الطويل، إضافة الفهارس.
+- السلامة المرجعية: `ON DELETE CASCADE` للحفاظ على سلامة البيانات.
+- سهولة الاستخدام: `DEFAULT CURRENT_TIMESTAMP` لتسجيل الأوقات.
+
+### الخطوات التالية:
+- إنشاء الفهارس لتحسين الأداء.
+- إضافة أذونات المستخدمين.
+- ميزة الإعجابات حسب الحاجة.
+
+يمكنك الآن استخدام هذا الهيكل لتطوير تطبيق المدونة الخاص بك، مع مراعاة التحسينات المقترحة.
+
+[⚡ المنفذ] تم تصميم هيكل قاعدة البيانات لتطبيق المدونة بشكل جيد، مع إضافة بعض التحسينات والتعديلات الهامة لضمان الأمان والأداء والسلامة المرجعية. فيما يلي ملخص الهيكل النهائي والاستعلامات الأساسية:
+
+### هيكل قاعدة البيانات النهائي
+
+#### 1. جدول المستخدمين (Users)
+- تم إضافة `created_at` لتسجيل وقت إنشاء الحساب.
+- تم استخدام `UNIQUE` لمنع تكرار الأسماء والبريد الإلكتروني.
+- تم تشفير كلمة المرور باستخدام bcrypt قبل التخزين.
+
+#### 2. جدول المنشورات (Posts) 
+- تم استخدام `TEXT` لدعم المحتوى الطويل.
+- تم إضافة `ON DELETE CASCADE` لحذف المنشورات إذا تم حذف المستخدم.
+- تم استخدام `DEFAULT CURRENT_TIMESTAMP` لتسجيل وقت النشر تلقائيًا.
+
+#### 3. جدول التعليقات (Comments)
+- تم إضافة `ON DELETE CASCADE` لحذف التعليقات إذا تم حذف المنشور أو المستخدم.
+- تم استخدام `DEFAULT CURRENT_TIMESTAMP` لتسجيل وقت التعليق تلقائيًا.
+
+#### 4. جدول التصنيفات (Categories)
+- تم استخدام `UNIQUE` لمنع تكرار أسماء التصنيفات.
+
+#### 5. جدول العلاقة بين المنشورات والتصنيفات (Post_Categories)
+- تم استخدام `PRIMARY KEY` مركب لمنع تكرار العلاقات.
+- تم إضافة `ON DELETE CASCADE` لحذف العلاقات إذا تم حذف المنشور أو التصنيف.
+
+### استعلامات SQL الأساسية
+
+#### 1. إضافة مستخدم جديد
+- تم استخدام مكتبة `bcrypt` لتشفير كلمة المرور قبل الإدخال.
+
+#### 2. إضافة منشور جديد
+- تم استخدام `DEFAULT CURRENT_TIMESTAMP` لتسجيل وقت النشر تلقائيًا.
+
+#### 3. إضافة تصنيف لمنشور
+- تم إضافة هذا الاستعلام لربط المنشور بالتصنيف.
+
+#### 4. استرجاع جميع المنشورات مع أسماء المؤلفين والتصنيفات
+- تم استخدام `GROUP_CONCAT` لعرض جميع التصنيفات المرتبطة بالمنشور في عمود واحد.
+- تم استخدام `LEFT JOIN` لضمان ظهور المنشورات حتى بدون تصنيفات.
+
+#### 5. حذف منشور
+- تم الاستفادة من `ON DELETE CASCADE` لحذف التعليقات والتصنيفات المرتبطة تلقائيًا.
+
+#### 6. تحديث معلومات المستخدم
+- تم إضافة هذا الاستعلام لتحديث بيانات المستخدم.
+
+### الخطوات التالية المقترحة
+
+1. **إنشاء الفهارس (Indexes)** لتحسين أداء الاستعلامات.
+2. **إضافة أذونات المستخدمين** (إذا كان التطبيق يدعم أدوارًا مثل Admin، Editor، Reader).
+3. **إضافة ميزة الإعجابات (Likes)** إذا كانت مطلوبة.
+
+هذا الهيكل يوفر أساسًا قويًا لتطوير تطبيق المدونة الخاص بك. يمكنك الآن البدء في تطبيق المزيد من الميزات والتحسينات حسب احتياجات تطبيقك.

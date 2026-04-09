@@ -1,0 +1,799 @@
+Task: صمّم نظام مصادقة مستخدمين باستخدام JWT. اشرح تدفق البيانات، مكان تخزين التوكن، وكيفية التعامل مع الـ Refresh Tokens.
+Timestamp: 2026-04-08 12:03:30
+Total Tokens: 30275
+Total Calls: 5
+============================================================
+
+[💡 المبتكر]
+نظام المصادقة باستخدام JWT (JSON Web Tokens) هو نظام آمن وموثوق لتحقق هوية المستخدمين. إليك خطوات تصميم النظام وتدفق البيانات:
+
+### 1. تسجيل الدخول
+
+- **مستخدم**: يقوم المستخدم بتقديم بياناته مثل البريد الإلكتروني وكلمة المرور لطلب تسجيل الدخول.
+- **خادم**: يقوم الخادم بفحص بيانات المستخدم، إذا كانت صحيحة، يُنشئ خادم JWT ويُرسله للمستخدم.
+
+### 2. إنشاء JWT
+
+- **مكونات JWT**: يتكون JWT من ثلاثة أجزاء: Header، Payload، وSignature. يحتوي Header على نوع التوكن والخوارزمية المستخدمة. يحتوي Payload على بيانات المستخدم والوقت الصادر والمنتهي بالتوكن. يتم إنشاء Signature باستخدام Header وPayload ومفتاح سري.
+- **إرسال JWT**: يُرسل الخادم JWT للمستخدم بعد تسجيل الدخول الناجح.
+
+### 3. تخزين التوكن
+
+- **الطرف الزاحف (Client-Side)**: يُخزن التوكن عادةً في التخزين المحلي (Local Storage) أو في الكوكيز (Cookies) على جهاز المستخدم. ومع ذلك، يجب أن تكون حذرًا عند استخدام التخزين المحلي لتخزين التوكنات الحساسة، حيث يمكن أن يتعرض للاختراق. يمكن استخدام الكوكيز المُحميّة (Secure Cookies) كبديل أكثر أمانًا.
+- **الخادم**: لا يخزن الخادم JWT نفسه، ولكنه يخزن Refresh Token في قاعدة البيانات إذا تم استخدام نظام Refresh Tokens.
+
+### 4. طلبات المصادقة
+
+- **إرسال JWT**: عند كل طلب من المستخدم إلى الخادم، يجب أن يُرسل JWT مع الطلب في رأس (Header) أو جسم (Body) الطلب.
+- **التحقق**: يقوم الخادم بفحص JWT وفك تشفيره لتحقق هوية المستخدم. إذا كان التوكن صحيحًا وسليمًا، يتم إجراء الطلب.
+
+### 5. Refresh Tokens
+
+- **الغرض**: Refresh Tokens تستخدم لتحديث JWT عند انتهاء صلاحيته. عندما ينتهي صلاحية JWT، يُستخدم Refresh Token لطلب JWT جديد من الخادم.
+- **التخزين**: يُخزن Refresh Token عادةً على الخادم في قاعدة البيانات ومُدَّعَم بتوكن مُختصر يُخزّن على جهاز المستخدم.
+- **الاستخدام**: عندما ينتهي صلاحية JWT، يُرسل جهاز المستخدم Refresh Token إلى الخادم. إذا كان Refresh Token صحيحًا، يُنشئ الخادم JWT جديدًا ويُرسله إلى المستخدم.
+
+### 6. أمان Refresh Tokens
+
+- **التهيئة**: يجب تكوين Refresh Tokens بحيث تكون صالحة لفترة أطول من JWT، ولكن يجب أن تكون قابلة للإلغاء في حالة سرقة أو إساءة استخدام.
+- **إلغاء**: يجب أن يكون الخادم قادرًا على إلغاء Refresh Tokens في حالة تسرب أو إساءة استخدام.
+
+### 7. إعادة تسجيل الدخول
+
+- **استخدام Refresh Token**: عندما ينتهي صلاحية JWT، يستخدم المستخدم Refresh Token للحصول على JWT جديد دون الحاجة إلى إعادة تسجيل الدخول.
+- **إعادة تسجيل الدخول**: إذا انتهت صلاحية Refresh Token أو تم إلغاؤه، عليه للمستخدم أن يطلب تسجيل الدخول مرة أخرى.
+
+هذا النظام يضمن مصادقة آمنة للمستخدمين ويتوافق مع معايير الأمان الحديثة. يجب دائمًا مراعاة تقنيات التشفير والأمان عند تصميم نظام مصادقة.
+
+------------------------------------------------------------
+
+[📊 المحلل]
+تصميم نظام مصادقة باستخدام JWT هو خطوة مهمة لضمان أمان وموثوقية تطبيق الويب. إليك تدقيق وتحسين لتصميم النظام المقترح، مع التركيز على تدفق البيانات، مكان تخزين التوكن، وكيفية التعامل مع الـ Refresh Tokens.
+
+### 1. تسجيل الدخول
+
+- **مستخدم**: يقوم المستخدم بتقديم بيانات الاعتماد (مثل البريد الإلكتروني وكلمة المرور) لطلب تسجيل الدخول.
+- **خادم**: يقوم الخادم بتحقق بيانات الاعتماد. إذا كانت صحيحة، يُنشئ الخادم JWT ويرسله للمستخدم.
+
+### 2. إنشاء JWT
+
+- **مكونات JWT**:
+  - **Header**: يحتوي على نوع التوكن والخوارزمية المستخدمة (مثلاً، `HS256`).
+  - **Payload**: يحتوي على بيانات المستخدم (مثل المعرف الفريد `user_id`) والزمن المقيد (مثل `iat` و `exp`).
+  - **Signature**: يتم إنشاؤها باستخدام Header وPayload ومفتاح سري.
+
+- **إرسال JWT**: يُرسل الخادم JWT للمستخدم بعد تسجيل الدخول الناجح.
+
+### 3. تخزين التوكن
+
+- **الطرف الزاحف (Client-Side)**:
+  - **المفضل**: استخدام الكوكيز المُحمية (Secure Cookies) لتخزين JWT. هذا يوفر حماية ضد هجمات XSS (Cross-Site Scripting).
+  - **بدائل**: يمكن أيضًا استخدام التخزين المحلي (Local Storage) مع تطبيق إجراءات أمان إضافية، مثل تشفير JWT قبل تخزينه.
+
+- **الخادم**: لا يُخزن الخادم JWT نفسه، ولكنه يُخزن Refresh Token في قاعدة البيانات.
+
+### 4. طلبات المصادقة
+
+- **إرسال JWT**: عند كل طلب من المستخدم إلى الخادم، يجب أن يُرسل JWT كجزء من رأس الطلب (Header)، عادةً في الحقل `Authorization` كـ `Bearer <JWT>`.
+
+- **التحقق**: يقوم الخادم بفحص JWT لتحقق من صحته وفترة صلاحيته. إذا كان التوكن صحيحًا وسليمًا، يتم إجراء الطلب.
+
+### 5. Refresh Tokens
+
+- **الغرض**: Refresh Tokens تُستخدم لتحديث JWT عند انتهاء صلاحيته دون الحاجة إلى إعادة تسجيل الدخول.
+
+- **التخزين**:
+  - **خادم**: يُخزن Refresh Token في قاعدة البيانات مع معلومات مثل المعرف الفريد للمستخدم وتاريخ انتهاء الصلاحية.
+  - **مستخدم**: يُخزن Refresh Token في الكوكيز المُحمية أو في التخزين المحلي مع تشفير إضافي.
+
+- **الاستخدام**:
+  - **طلب JWT جديد**: عندما ينتهي صلاحية JWT، يُرسل المستخدم Refresh Token إلى نقطة نهاية محددة على الخادم.
+  - **التحقق**: يقوم الخادم بتحقق صحة Refresh Token. إذا كان صحيحًا، يُنشئ JWT جديدًا ويُرسله للمستخدم.
+
+### 6. أمان Refresh Tokens
+
+- **التهيئة**:
+  - **فترة صلاحية طويلة**: يجب أن تكون Refresh Tokens صالحة لفترة أطول من JWT، ولكن يجب أن تكون قابلة للإلغاء.
+  - **إلغاء**: يجب أن يكون الخادم قادرًا على إلغاء Refresh Tokens في حالة تسرب أو إساءة استخدام.
+
+- **استراتيجيات أمان إضافية**:
+  - **التحديث الدوري**: تحديث Refresh Tokens بشكل دوري لزيادة الأمان.
+  - **ربط بجلسة المستخدم**: ربط Refresh Tokens بجلسات المستخدم لزيادة صعوبة الاستخدام غير المصرح به.
+
+### 7. إعادة تسجيل الدخول
+
+- **استخدام Refresh Token**: عند انتهاء صلاحية JWT، يستخدم المستخدم Refresh Token للحصول على JWT جديد دون الحاجة إلى إعادة تسجيل الدخول.
+- **إعادة تسجيل الدخول**: إذا انتهت صلاحية Refresh Token أو تم إلغاؤه، يجب على المستخدم إعادة تسجيل الدخول باستخدام بيانات الاعتماد الأصلية.
+
+### خلاصة
+
+تصميم نظام مصادقة باستخدام JWT يتطلب عناية خاصة بالأمان والتدقيق في تدفق البيانات. استخدام الكوكيز المُحمية لتخزين JWT وتطبيق استراتيجيات أمان إضافية لـ Refresh Tokens يمكن أن يساعد في تحسين الأمان وضمان تجربة مستخدم موثوقة.
+
+------------------------------------------------------------
+
+[💻 المبرمج]
+# نظام مصادقة المستخدمين باستخدام JWT: تصميم وتنفيذ عملي
+
+## تدفق البيانات الكامل
+
+```mermaid
+sequenceDiagram
+    participant User
+    participant Client
+    participant Server
+    participant DB
+
+    User->>Client: إدخال بيانات الاعتماد
+    Client->>Server: POST /login (email, password)
+    Server->>DB: التحقق من بيانات الاعتماد
+    DB-->>Server: بيانات المستخدم
+    Server->>Server: إنشاء JWT وRefresh Token
+    Server->>DB: تخزين Refresh Token
+    Server-->>Client: إرسال JWT وRefresh Token
+    Client->>Client: تخزين JWT في HttpOnly Cookie
+    Client->>Client: تخزين Refresh Token في HttpOnly Cookie
+
+    loop كل طلب محمي
+        Client->>Server: طلب محمي + JWT في Cookie
+        Server->>Server: التحقق من JWT
+        alt JWT صالح
+            Server-->>Client: استجابة الطلب
+        else JWT منتهي الصلاحية
+            Client->>Server: POST /refresh (Refresh Token)
+            Server->>DB: التحقق من Refresh Token
+            alt Refresh Token صالح
+                Server->>Server: إنشاء JWT جديد
+                Server-->>Client: إرسال JWT جديد
+                Client->>Client: تحديث JWT في Cookie
+                Client->>Server: إعادة إرسال الطلب الأصلي
+                Server-->>Client: استجابة الطلب
+            else Refresh Token غير صالح
+                Server-->>Client: خطأ 401 (غير مصرح)
+                Client->>User: إعادة تسجيل الدخول
+            end
+        end
+    end
+```
+
+## تنفيذ عملي باستخدام Node.js وExpress
+
+### 1. إعداد المشروع
+
+```bash
+mkdir jwt-auth-system
+cd jwt-auth-system
+npm init -y
+npm install express jsonwebtoken bcryptjs mongoose cookie-parser dotenv cors
+```
+
+### 2. ملف `.env`
+
+```env
+JWT_SECRET=your_jwt_secret_key_here
+JWT_EXPIRES_IN=15m
+REFRESH_TOKEN_SECRET=your_refresh_token_secret_key_here
+REFRESH_TOKEN_EXPIRES_IN=7d
+MONGODB_URI=mongodb://localhost:27017/jwt_auth
+PORT=5000
+```
+
+### 3. نموذج المستخدم (models/User.js)
+
+```javascript
+const mongoose = require('mongoose');
+const bcrypt = require('bcryptjs');
+
+const userSchema = new mongoose.Schema({
+  email: {
+    type: String,
+    required: true,
+    unique: true,
+    trim: true,
+    lowercase: true
+  },
+  password: {
+    type: String,
+    required: true,
+    minlength: 6
+  },
+  refreshTokens: [{
+    token: {
+      type: String,
+      required: true
+    },
+    expiresAt: {
+      type: Date,
+      required: true
+    }
+  }]
+}, { timestamps: true });
+
+// تشفير كلمة المرور قبل الحفظ
+userSchema.pre('save', async function(next) {
+  if (!this.isModified('password')) return next();
+  this.password = await bcrypt.hash(this.password, 10);
+  next();
+});
+
+// طريقة لمقارنة كلمات المرور
+userSchema.methods.comparePassword = async function(candidatePassword) {
+  return await bcrypt.compare(candidatePassword, this.password);
+};
+
+module.exports = mongoose.model('User', userSchema);
+```
+
+### 4. خدمات JWT (services/jwtService.js)
+
+```javascript
+const jwt = require('jsonwebtoken');
+const User = require('../models/User');
+
+const generateTokens = (userId) => {
+  const accessToken = jwt.sign({ id: userId }, process.env.JWT_SECRET, {
+    expiresIn: process.env.JWT_EXPIRES_IN
+  });
+
+  const refreshToken = jwt.sign({ id: userId }, process.env.REFRESH_TOKEN_SECRET, {
+    expiresIn: process.env.REFRESH_TOKEN_EXPIRES_IN
+  });
+
+  return { accessToken, refreshToken };
+};
+
+const storeRefreshToken = async (userId, refreshToken) => {
+  const expiresAt = new Date();
+  expiresAt.setDate(expiresAt.getDate() + 7); // 7 أيام
+
+  await User.findByIdAndUpdate(userId, {
+    $push: {
+      refreshTokens: {
+        token: refreshToken,
+        expiresAt
+      }
+    }
+  });
+};
+
+const verifyRefreshToken = async (token) => {
+  try {
+    const decoded = jwt.verify(token, process.env.REFRESH_TOKEN_SECRET);
+    const user = await User.findById(decoded.id);
+
+    if (!user) {
+      throw new Error('المستخدم غير موجود');
+    }
+
+    const tokenExists = user.refreshTokens.some(
+      t => t.token === token && new Date(t.expiresAt) > new Date()
+    );
+
+    if (!tokenExists) {
+      throw new Error('Refresh Token غير صالح أو منتهي الصلاحية');
+    }
+
+    return decoded;
+  } catch (error) {
+    throw new Error('Refresh Token غير صالح');
+  }
+};
+
+const revokeRefreshToken = async (userId, token) => {
+  await User.findByIdAndUpdate(userId, {
+    $pull: {
+      refreshTokens: { token }
+    }
+  });
+};
+
+module.exports = {
+  generateTokens,
+  storeRefreshToken,
+  verifyRefreshToken,
+  revokeRefreshToken
+};
+```
+
+### 5. Middleware للمصادقة (middleware/auth.js)
+
+```javascript
+const jwt = require('jsonwebtoken');
+
+const authenticate = (req, res, next) => {
+  // الحصول على التوكن من الكوكيز
+  const token = req.cookies.accessToken;
+
+  if (!token) {
+    return res.status(401).json({ message: 'غير مصرح - لا يوجد توكن' });
+  }
+
+  try {
+    const decoded = jwt.verify(token, process.env.JWT_SECRET);
+    req.user = decoded;
+    next();
+  } catch (error) {
+    // إذا كان التوكن منتهي الصلاحية، نعيد 401 ليتم التعامل معه في العميل
+    if (error.name === 'TokenExpiredError') {
+      return res.status(401).json({ message: 'التوكن منتهي الصلاحية' });
+    }
+    return res.status(401).json({ message: 'توكن غير صالح' });
+  }
+};
+
+module.exports = authenticate;
+```
+
+### 6. مسارات المصادقة (routes/authRoutes.js)
+
+```javascript
+const express = require('express');
+const router = express.Router();
+const bcrypt = require('bcryptjs');
+const User = require('../models/User');
+const {
+  generateTokens,
+  storeRefreshToken,
+  verifyRefreshToken,
+  revokeRefreshToken
+} = require('../services/jwtService');
+const authenticate = require('../middleware/auth');
+
+// تسجيل مستخدم جديد
+router.post('/register', async (req, res) => {
+  try {
+    const { email, password } = req.body;
+
+    // التحقق من وجود المستخدم
+    const existingUser = await User.findOne({ email });
+    if (existingUser) {
+      return res.status(400).json({ message: 'البريد الإلكتروني مستخدم بالفعل' });
+    }
+
+    // إنشاء مستخدم جديد
+    const user = new User({ email, password });
+    await user.save();
+
+    // إنشاء التوكنات
+    const { accessToken, refreshToken } = generateTokens(user._id);
+    await storeRefreshToken(user._id, refreshToken);
+
+    // تعيين الكوكيز
+    res.cookie('accessToken', accessToken, {
+      httpOnly: true,
+      secure: process.env.NODE_ENV === 'production',
+      sameSite: 'strict',
+      maxAge: 15 * 60 * 1000 // 15 دقيقة
+    });
+
+    res.cookie('refreshToken', refreshToken, {
+      httpOnly: true,
+      secure: process.env.NODE_ENV === 'production',
+      sameSite: 'strict',
+      maxAge: 7 * 24 * 60 * 60 * 1000 // 7 أيام
+    });
+
+    res.status(201).json({ message: 'تم التسجيل بنجاح', user: { id: user._id, email: user.email } });
+  } catch (error) {
+    res.status(500).json({ message: 'حدث خطأ أثناء التسجيل', error: error.message });
+  }
+});
+
+// تسجيل الدخول
+router.post('/login', async (req, res) => {
+  try {
+    const { email, password } = req.body;
+
+    // التحقق من وجود المستخدم
+    const user = await User.findOne({ email });
+    if (!user) {
+      return res.status(401).json({ message: 'بيانات الاعتماد غير صحيحة' });
+    }
+
+    // التحقق من كلمة المرور
+    const isMatch = await user.comparePassword(password);
+    if (!isMatch) {
+      return res.status(401).json({ message: 'بيانات الاعتماد غير صحيحة' });
+    }
+
+    // إنشاء التوكنات
+    const { accessToken, refreshToken } = generateTokens(user._id);
+    await storeRefreshToken(user._id, refreshToken);
+
+    // تعيين الكوكيز
+    res.cookie('accessToken', accessToken, {
+      httpOnly: true,
+      secure: process.env.NODE_ENV === 'production',
+      sameSite: 'strict',
+      maxAge: 15 * 60 * 1000 // 15 دقيقة
+    });
+
+    res.cookie('refreshToken', refreshToken, {
+      httpOnly: true,
+      secure: process.env.NODE_ENV === 'production',
+      sameSite: 'strict',
+      maxAge: 7 * 24 * 60 * 60 * 1000 // 7 أيام
+    });
+
+    res.json({ message: 'تم تسجيل الدخول بنجاح', user: { id: user._id, email: user.email } });
+  } catch (error) {
+    res.status(500).json({ message: 'حدث خطأ أثناء تسجيل الدخول', error: error.message });
+  }
+});
+
+// تحديث التوكن
+router.post('/refresh', async (req, res) => {
+  try {
+    const refreshToken = req.cookies.refreshToken;
+
+    if (!refreshToken) {
+      return res.status(401).json({ message: 'لا يوجد Refresh Token' });
+    }
+
+    // التحقق من صحة Refresh Token
+    const decoded = await verifyRefreshToken(refreshToken);
+
+    // إنشاء توكن جديد
+    const { accessToken, refreshToken: newRefreshToken } = generateTokens(decoded.id);
+
+    // تحديث Refresh Token في قاعدة البيانات
+    await revokeRefreshToken(decoded.id, refreshToken);
+    await storeRefreshToken(decoded.id, newRefreshToken);
+
+    // تعيين الكوكيز الجديدة
+    res.cookie('accessToken', accessToken, {
+      httpOnly: true,
+      secure: process.env.NODE_ENV === 'production',
+      sameSite: 'strict',
+      maxAge: 15 * 60 * 1000 // 15 دقيقة
+    });
+
+    res.cookie('refreshToken', newRefreshToken, {
+      httpOnly: true,
+      secure: process.env.NODE_ENV === 'production',
+      sameSite: 'strict',
+      maxAge: 7 * 24 * 60 * 60 * 1000 // 7 أيام
+    });
+
+    res.json({ message: 'تم تحديث التوكن بنجاح' });
+  } catch (error) {
+    // إذا كان Refresh Token غير صالح، نقوم بمسح الكوكيز
+    res.clearCookie('accessToken');
+    res.clearCookie('refreshToken');
+    res.status(401).json({ message: 'Refresh Token غير صالح', error: error.message });
+  }
+});
+
+// تسجيل الخروج
+router.post('/logout', authenticate, async (req, res) => {
+  try {
+    const refreshToken = req.cookies.refreshToken;
+
+    if (refreshToken) {
+      await revokeRefreshToken(req.user.id, refreshToken);
+    }
+
+    // مسح الكوكيز
+    res.clearCookie('accessToken');
+    res.clearCookie('refreshToken');
+
+    res.json({ message: 'تم تسجيل الخروج بنجاح' });
+  } catch (error) {
+    res.status(500).json({ message: 'حدث خطأ أثناء تسجيل الخروج', error: error.message });
+  }
+});
+
+// مسار محمي
+router.get('/protected', authenticate, (req, res) => {
+  res.json({ message: 'هذا مسار محمي', user: req.user });
+});
+
+module.exports = router;
+```
+
+### 7. ملف الخادم الرئيسي (server.js)
+
+```javascript
+require('dotenv').config();
+const express = require('express');
+const mongoose = require('mongoose');
+const cookieParser = require('cookie-parser');
+const cors = require('cors');
+const authRoutes = require('./routes/authRoutes');
+
+const app = express();
+
+// إعدادات Middleware
+app.use(cors({
+  origin: 'http://localhost:3000', // استبدل بعنوان العميل الخاص بك
+  credentials: true
+}));
+app.use(express.json());
+app.use(cookieParser());
+
+// الاتصال بقاعدة البيانات
+mongoose.connect(process.env.MONGODB_URI)
+  .then(() => console.log('تم الاتصال بقاعدة البيانات'))
+  .catch(err => console.error('خطأ في الاتصال بقاعدة البيانات:', err));
+
+// المسارات
+app.use('/api/auth', authRoutes);
+
+// معالجة الأخطاء العامة
+app.use((err, req, res, next) => {
+  console.error(err.stack);
+  res.status(500).json({ message: 'حدث خطأ داخلي في الخادم' });
+});
+
+const PORT = process.env.PORT || 5000;
+app.listen(PORT, () => {
+  console.log(`الخادم يعمل على المنفذ ${PORT}`);
+});
+```
+
+## أفضل الممارسات الأمنية
+
+1. **تخزين التوكنات**:
+   - استخدم دائمًا HttpOnly وSecure للكوكيز لمنع هجمات XSS وCSRF
+   - تجنب تخزين JWT في localStorage أو sessionStorage لأنها عرضة لهجمات XSS
+
+2. **إعدادات JWT**:
+   - استخدم خوارزميات تشفير قوية مثل HS256 أو RS256
+   - اجعل مدة صلاحية JWT قصيرة (15-30 دقيقة)
+   - استخدم مفاتيح سرية قوية ومعقدة
+
+3. **Refresh Tokens**:
+   - قم بتخزينها في قاعدة البيانات مع معلومات إضافية مثل عنوان IP ووقت الإصدار
+   - قم بإلغاء صلاحيتها عند تسجيل الخروج أو عند اكتشاف نشاط مشبوه
+   - استخدم مدة صلاحية أطول (7-30 يومًا) ولكن قم بتحديثها دوريًا
+
+4. **حماية المسارات**:
+   - استخدم middleware للتحقق من JWT في كل طلب يتطلب مصادقة
+   - قم بتنفيذ آليات معدل الطلب (rate limiting) لمنع هجمات القوة الغاشمة
+
+5. **مراقبة الأمان**:
+   - سجل محاولات تسجيل الدخول الفاشلة والناجحة
+   - قم بتنفيذ آليات للكشف عن الأنشطة المشبوهة
+   - استخدم خدمات مثل Sentry لمراقبة الأخطاء
+
+## التعامل مع سيناريوهات متقدمة
+
+### 1. إلغاء جميع Refresh Tokens للمستخدم
+
+```javascript
+// إضافة إلى routes/authRoutes.js
+router.post('/revoke-all', authenticate, async (req, res) => {
+  try {
+    await User.findByIdAndUpdate(req.user.id, {
+      $set: { refreshTokens: [] }
+    });
+
+    res.clearCookie('accessToken');
+    res.clearCookie('refreshToken');
+
+    res.json({ message: 'تم إلغاء جميع الجلسات بنجاح' });
+  } catch (error) {
+    res.status(500).json({ message: 'حدث خطأ أثناء إلغاء الجلسات', error: error.message });
+  }
+});
+```
+
+### 2. التحقق من صلاحية التوكن بدون Middleware
+
+```javascript
+// إضافة إلى services/jwtService.js
+const verifyAccessToken = (token) => {
+  try {
+    return jwt.verify(token, process.env.JWT_SECRET);
+  } catch (error) {
+    throw error;
+  }
+};
+
+module.exports = {
+  // ... الدوال السابقة
+  verifyAccessToken
+};
+```
+
+### 3. تحديث معلومات المستخدم مع الحفاظ على الجلسة
+
+```javascript
+// إضافة إلى routes/authRoutes.js
+router.put('/profile', authenticate, async (req, res) => {
+  try {
+    const { email, currentPassword, newPassword } = req.body;
+
+    const user = await User.findById(req.user.id);
+
+    // التحقق من كلمة المرور الحالية إذا تم تقديمها
+    if (currentPassword) {
+      const isMatch = await user.comparePassword(currentPassword);
+      if (!isMatch) {
+        return res.status(401).json({ message: 'كلمة المرور الحالية غير صحيحة' });
+      }
+    }
+
+    // تحديث البريد الإلكتروني إذا تم تغييره
+    if (email && email !== user.email) {
+      const existingUser = await User.findOne({ email });
+      if (existingUser) {
+        return res.status(400).json({ message: 'البريد الإلكتروني مستخدم بالفعل' });
+      }
+      user.email = email;
+    }
+
+    // تحديث كلمة المرور إذا تم تغييرها
+    if (newPassword) {
+      user.password = newPassword;
+    }
+
+    await user.save();
+
+    res.json({ message: 'تم تحديث الملف الشخصي بنجاح', user: { id: user._id, email: user.email } });
+  } catch (error) {
+    res.status(500).json({ message: 'حدث خطأ أثناء تحديث الملف الشخصي', error: error.message });
+  }
+});
+```
+
+## اختبار النظام باستخدام Postman
+
+1. **تسجيل مستخدم جديد**:
+   - POST إلى `/api/auth/register`
+   - Body: `{ "email": "user@example.com", "password": "password123" }`
+   - تحقق من استلام الكوكيز في الاستجابة
+
+2. **تسجيل الدخول**:
+   - POST إلى `/api/auth/login`
+   - Body: `{ "email": "user@example.com", "password": "password123" }`
+   - تحقق من استلام الكوكيز في الاستجابة
+
+3. **الوصول إلى مسار محمي**:
+   - GET إلى `/api/auth/protected`
+   - تأكد من إرسال الكوكيز تلقائيًا مع الطلب
+   - يجب أن تحصل على استجابة تحتوي على بيانات المستخدم
+
+4. **تحديث التوكن**:
+   - انتظر حتى ينتهي صلاحية JWT (15 دقيقة)
+   - POST إلى `/api/auth/refresh`
+   - يجب أن تحصل على كوكيز جديدة مع توكنات محدثة
+
+5. **تسجيل الخروج**:
+   - POST إلى `/api/auth/logout`
+   - تحقق من مسح الكوكيز
+
+## الخاتمة
+
+هذا النظام يوفر حلاً متكاملاً وآمنًا لمصادقة المستخدمين باستخدام JWT مع دعم Refresh Tokens. يوفر التصميم فصلاً واضحًا بين المكونات المختلفة ويتبع أفضل الممارسات الأمنية.
+
+لتنفيذ هذا النظام في بيئة الإنتاج، يجب عليك:
+1. استخدام HTTPS فقط
+2. إعداد مفاتيح سرية قوية ومعقدة
+3. تنفيذ آليات مراقبة الأمان
+4. إعداد نسخ احتياطية لقاعدة البيانات
+5. مراجعة وتحديث المكتبات المستخدمة بانتظام
+
+يمكن توسيع هذا النظام بإضافة ميزات مثل:
+- التحقق بخطوتين (2FA)
+- تسجيل الدخول باستخدام حسابات الطرف الثالث (Google, Facebook, etc.)
+- إدارة الأدوار والأذونات
+- تسجيل ومراقبة الأنشطة
+
+------------------------------------------------------------
+
+[📚 الباحث]
+# نظام مصادقة المستخدمين باستخدام JWT: شرح مفصل
+
+## تدفق البيانات
+
+### 1. تسجيل الدخول
+
+- **مستخدم**: يقوم المستخدم بإدخال بيانات الاعتماد الخاصة به (مثل البريد الإلكتروني وكلمة المرور) ويطلب تسجيل الدخول.
+- **خادم**: يستقبل الخادم طلب تسجيل الدخول ويتحقق من صحة بيانات الاعتماد. إذا كانت صحيحة، فإنه ينشئ توكن JWT (JSON Web Token) ويُرسله للمستخدم.
+
+### 2. إنشاء JWT
+
+- **مكونات JWT**:
+  - **Header**: يحتوي على معلومات حول نوع التوكن والخوارزمية المستخدمة.
+  - **Payload**: يحتوي على بيانات المستخدم، مثل المعرّف الفريد للمستخدم، ووقت إصدار التوكن، ووقت انتهاء صلاحيته، وبيانات أخرى ذات صلة.
+  - **Signature**: يتم إنشاء التوقيع باستخدام خوارزمية التشفير، ويحتوي على معلومات من Header وPayload بالإضافة إلى مفتاح سري.
+- **إرسال JWT**: يُرسل الخادم توكن JWT إلى المستخدم كاستجابة لطلب تسجيل الدخول الناجح.
+
+### 3. تخزين التوكن
+
+- **الطرف الزاحف (Client-Side)**:
+  - **المفضل**: يُخزن توكن JWT في الكوكيز المحمية (Secure Cookies) على جهاز المستخدم. الكوكيز المحمية هي طريقة آمنة لتخزين التوكنات، حيث يتم إرسالها فقط عبر اتصالات HTTPS، مما يمنع هجمات الوسيط (Man-in-the-middle).
+  - **بدائل**: يمكن أيضًا تخزين JWT في التخزين المحلي (Local Storage) أو في ذاكرة التخزين المؤقت (Cache) على جهاز المستخدم، ولكن يجب توخي الحذر لأن هذه الطرق قد تكون عرضة لهجمات XSS (Cross-Site Scripting).
+- **الخادم**: لا يخزن الخادم توكن JWT نفسه، ولكنه يخزن توكنات Refresh Token في قاعدة البيانات.
+
+### 4. طلبات المصادقة
+
+- **إرسال JWT**: عند كل طلب من المستخدم إلى الخادم، يجب أن يُرسل توكن JWT مع الطلب. يمكن إرسال التوكن في رأس (Header) الطلب أو في جسم (Body) الطلب، اعتمادًا على تصميم النظام.
+- **التحقق**: يقوم الخادم باستلام توكن JWT مع الطلب، ثم يقوم بفك تشفيره والتحقق من صحته. إذا كان التوكن صحيحًا وسليمًا، فإنه يُسمح بإجراء الطلب.
+
+### 5. Refresh Tokens
+
+- **الغرض**: توكنات Refresh Tokens تُستخدم لتحديث توكنات JWT عند انتهاء صلاحيتها، مما يسمح للمستخدم بالبقاء مسجل الدخول دون الحاجة إلى إعادة إدخال بيانات الاعتماد الخاصة به.
+- **التخزين**:
+  - **خادم**: يُخزن توكن Refresh Token في قاعدة البيانات، عادةً مع معلومات إضافية مثل المعرّف الفريد للمستخدم وتاريخ انتهاء الصلاحية.
+  - **مستخدم**: يُخزن توكن Refresh Token في الكوكيز المحمية أو في التخزين المحلي على جهاز المستخدم.
+- **الاستخدام**:
+  - **طلب JWT جديد**: عندما ينتهي صلاحية توكن JWT، يُرسل المستخدم توكن Refresh Token إلى الخادم.
+  - **التحقق**: يقوم الخادم بتحقق صحة توكن Refresh Token. إذا كان صالحًا، فإنه ينشئ توكن JWT جديدًا ويُرسله للمستخدم.
+
+### 6. أمان Refresh Tokens
+
+- **التهيئة**:
+  - **فترة صلاحية طويلة**: يجب أن تكون توكنات Refresh Tokens صالحة لفترة أطول من توكنات JWT، ولكن يجب أن تكون قابلة للإلغاء في حالة سرقة أو إساءة استخدام.
+  - **إلغاء**: يجب أن يكون الخادم قادرًا على إلغاء توكنات Refresh Tokens في أي وقت، خاصةً في حالة اكتشاف نشاط مشبوه أو تسرب للتوكنات.
+- **استراتيجيات أمان إضافية**:
+  - **التحديث الدوري**: يمكن للخادم تحديث توكنات Refresh Tokens بشكل دوري، مما يزيد من صعوبة التنبؤ بها واستخدامها بشكل غير مصرح به.
+  - **ربط بجلسة المستخدم**: يمكن ربط توكنات Refresh Tokens بجلسة المستخدم، بحيث لا يمكن استخدام توكن Refresh Token إلا من قبل المستخدم نفسه.
+
+### 7. إعادة تسجيل الدخول
+
+- **استخدام Refresh Token**: عندما ينتهي صلاحية توكن JWT، يستخدم المستخدم توكن Refresh Token للحصول على توكن JWT جديد دون الحاجة إلى إعادة إدخال بيانات الاعتماد.
+- **إعادة تسجيل الدخول**: إذا انتهت صلاحية توكن Refresh Token أو تم إلغاؤه، يجب على المستخدم إعادة تسجيل الدخول باستخدام بيانات الاعتماد الأصلية.
+
+## أفضل الممارسات الأمنية
+
+- **تخزين التوكنات**:
+  - استخدم دائمًا الكوكيز المحمية (Secure Cookies) لتخزين توكنات JWT وRefresh Tokens.
+  - تجنب تخزين التوكنات في التخزين المحلي أو ذاكرة التخزين المؤقت، حيث يمكن أن تكون عرضة لهجمات XSS.
+- **إعدادات JWT**:
+  - استخدم خوارزميات تشفير قوية مثل HS256 أو RS256.
+  - اجعل مدة صلاحية توكنات JWT قصيرة نسبيًا (مثل 15-30 دقيقة) لزيادة الأمان.
+  - استخدم مفاتيح سرية قوية ومعقدة لتوقيع التوكنات.
+- **مراقبة الأمان**:
+  - سجل محاولات تسجيل الدخول الفاشلة والناجحة، وراقب الأنشطة المشبوهة.
+  - استخدم خدمات مثل Sentry أو Loggly لمراقبة الأخطاء والأنشطة غير العادية.
+- **تحديث التوكنات**:
+  - قم بتحديث توكنات Refresh Tokens بشكل دوري لزيادة الأمان.
+  - قم بإلغاء توكنات Refresh Tokens عند تسجيل الخروج أو اكتشاف نشاط مشبوه.
+
+## الخاتمة
+
+نظام المصادقة باستخدام JWT مع دعم Refresh Tokens يوفر طريقة آمنة وفعالة لمصادقة المستخدمين. من خلال اتباع أفضل الممارسات الأمنية، يمكن ضمان تجربة مستخدم آمنة وموثوقة.
+
+------------------------------------------------------------
+
+[⚡ المنفذ]
+تم شرح تصميم نظام المصادقة باستخدام JWT بتفصيل كامل. إليك ملخص الخطوات الرئيسية:
+
+1. تسجيل الدخول:
+   - المستخدم يرسل بيانات الاعتماد (البريد الإلكتروني وكلمة المرور).
+   - الخادم يتحقق من صحة البيانات، ثم ينشئ توكن JWT ويرسله للمستخدم.
+
+2. إنشاء JWT:
+   - JWT يتكون من 3 أجزاء: Header، Payload، وSignature.
+   - الخادم ينشئ JWT باستخدام معلومات المستخدم وتوقيع سري.
+
+3. تخزين التوكن:
+   - على الجانب الزاحف (Client-Side): يتم تخزين JWT في الكوكيز المحمية (Secure Cookies).
+   - على الخادم: لا يتم تخزين JWT نفسه، ولكن يتم تخزين Refresh Tokens في قاعدة البيانات.
+
+4. طلبات المصادقة:
+   - عند كل طلب، يُرسل المستخدم JWT مع الطلب.
+   - الخادم يتحقق من صحة JWT قبل السماح بالطلب.
+
+5. Refresh Tokens:
+   - تُستخدم لتحديث JWT عند انتهاء صلاحيته.
+   - يتم تخزين Refresh Tokens على الخادم في قاعدة البيانات، وعلى الجانب الزاحف في الكوكيز المحمية.
+   - عند انتهاء صلاحية JWT، يُرسل المستخدم Refresh Token للحصول على JWT جديد.
+
+6. أمان Refresh Tokens:
+   - يجب أن تكون Refresh Tokens صالحة لفترة أطول من JWT، ولكن قابلة للإلغاء.
+   - يجب أن يكون الخادم قادرًا على إلغاء Refresh Tokens في حالة تسرب أو إساءة استخدام.
+
+7. إعادة تسجيل الدخول:
+   - عند انتهاء صلاحية JWT، يستخدم المستخدم Refresh Token للحصول على JWT جديد.
+   - إذا انتهت صلاحية Refresh Token أو تم إلغاؤه، يجب على المستخدم إعادة تسجيل الدخول.
+
+تم تقديم أيضًا أفضل الممارسات الأمنية لتحسين أمان النظام، مثل استخدام خوارزميات تشفير قوية، وتحديث التوكنات بشكل دوري، وتنفيذ آليات مراقبة الأمان.
+
+------------------------------------------------------------
+
+[🔷 الخبير المنطقي]
+عذراً، حدث خطأ: النموذج غير متاح
+
+------------------------------------------------------------
